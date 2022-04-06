@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="gameHeight">500dp</dimen>
-    <dimen name="gameWidth">300dp</dimen>
+    <integer name="gameHeight" format="integer">600</integer>
+    <integer name="gameWidth" format="integer">300</integer>
     <dimen name="gameRatio" format="float"> 2 </dimen>
 </resources>

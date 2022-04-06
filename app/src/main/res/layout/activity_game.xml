@@ -12,6 +12,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/grass_green"
+        android:keepScreenOn="true"
         app:h_to_w_ratio="@dimen/gameRatio"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

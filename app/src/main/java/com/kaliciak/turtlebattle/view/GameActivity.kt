@@ -1,19 +1,17 @@
 package com.kaliciak.turtlebattle.view
 
-import android.content.res.Resources
 import android.os.Bundle
-import android.util.Log
-import android.util.TypedValue
-import android.view.WindowInsets
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.updateLayoutParams
 import com.kaliciak.turtlebattle.Utility
 import com.kaliciak.turtlebattle.databinding.ActivityGameBinding
+import com.kaliciak.turtlebattle.viewModel.GameViewModel
 import kotlin.math.round
 
 
 class GameActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGameBinding
+    private var viewModel: GameViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,7 +19,14 @@ class GameActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        if(viewModel == null) {
+            viewModel = GameViewModel(resources, this, binding.gameView)
+        }
+        binding.gameView.viewModel = viewModel
+
         setGameViewSize()
+
+
     }
 
     private fun setGameViewSize() {

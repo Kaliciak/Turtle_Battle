@@ -1,4 +1,4 @@
 package com.kaliciak.turtlebattle.model
 
-class TurtleState(val x: Double, val y: Double, val r: Double) {
+class TurtleState(val x: Float, val y: Float, val r: Float, val color: TurtleColor) {
 }
