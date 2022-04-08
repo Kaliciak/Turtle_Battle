@@ -3,7 +3,7 @@ package com.kaliciak.turtlebattle.model
 class Turtle(var x: Float,
              var y: Float,
              var r: Float,
-             var mass: Int,
+             var mass: Float,
              var color: TurtleColor) {
     var forceX = 0f
     var forceY = 0f

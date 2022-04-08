@@ -21,6 +21,13 @@ class Board(val width: Int,
     private fun moveTurtles() {
         turtles.forEach(this::moveTurtle)
 //        Log.d("turtle", "${turtles[3]}")
+        for(turtle1 in turtles) {
+            for(turtle2 in turtles) {
+                if (turtle1 != turtle2) {
+                    Physics.collide(turtle1, turtle2)
+                }
+            }
+        }
     }
 
     private fun moveTurtle(turtle: Turtle) {

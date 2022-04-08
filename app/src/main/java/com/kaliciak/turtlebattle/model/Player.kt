@@ -41,8 +41,8 @@ class Player(val turtle: Turtle,
     }
 
     fun tick() {
-        turtle.forceX = (valX) * 300
-        turtle.forceY = (-valY) * 300
+        turtle.forceX = (valX) * 500
+        turtle.forceY = (-valY) * 500
     }
 
     fun stop() {
