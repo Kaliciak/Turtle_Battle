@@ -2,16 +2,12 @@ package com.kaliciak.turtlebattle.viewModel
 
 import android.content.Context
 import android.content.res.Resources
-import android.hardware.Sensor
-import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.kaliciak.turtlebattle.R
 import com.kaliciak.turtlebattle.model.*
-import com.kaliciak.turtlebattle.services.RotationVectorListener
 import com.kaliciak.turtlebattle.view.views.GameViewDelegate
 
 class GameViewModel(private val resources: Resources,
@@ -50,6 +46,10 @@ class GameViewModel(private val resources: Resources,
     fun stop() {
         handler.removeCallbacksAndMessages(null)
         player.stop()
+    }
+
+    fun getPlayerTurtle(): Turtle {
+        return player.turtle
     }
 
     inner class TickClock: Runnable {

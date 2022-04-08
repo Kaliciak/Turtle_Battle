@@ -23,7 +23,7 @@ class GameActivity : AppCompatActivity() {
             viewModel = GameViewModel(resources, this, binding.gameView)
         }
         binding.gameView.viewModel = viewModel
-
+        binding.gameView.binding = binding
         setGameViewSize()
         calibrate()
     }

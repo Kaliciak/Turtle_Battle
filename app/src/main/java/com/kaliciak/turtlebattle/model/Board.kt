@@ -8,7 +8,7 @@ class Board(val width: Int,
             val height: Int,
             val turtles: List<Turtle>,
             val fps: Int) {
-    private val friction = 0.01
+    private val friction = 0.2f
 
     fun getState(): BoardState {
         return BoardState(height, width, turtles.map { turtle ->  turtle.getState()})
@@ -20,15 +20,14 @@ class Board(val width: Int,
 
     private fun moveTurtles() {
         turtles.forEach(this::moveTurtle)
-        Log.d("turtle", "${turtles[3]}")
+//        Log.d("turtle", "${turtles[3]}")
     }
 
     private fun moveTurtle(turtle: Turtle) {
         turtle.x += (turtle.vX / fps)
         turtle.y += (turtle.vY / fps)
 
-        computeForces(turtle)
-
+        // when trying to move the opposite direction
         val aX = turtle.forceX / turtle.mass
         val aY = turtle.forceY / turtle.mass
         turtle.vX += (aX / fps)
@@ -41,6 +40,10 @@ class Board(val width: Int,
         }
 
         checkBorders(turtle)
+
+        // friction
+        turtle.vX *= 1 - (friction / fps)
+        turtle.vY *= 1 - (friction / fps)
     }
 
     private fun computeForces(turtle: Turtle) {

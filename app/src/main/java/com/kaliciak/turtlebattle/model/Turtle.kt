@@ -15,6 +15,14 @@ class Turtle(var x: Float,
     }
 
     override fun toString(): String {
-        return "$color r: $r, mass $mass, x: $x, y: $y, vX: $vX, vY: $vY, fX: $forceX, fY: $forceY"
+        return """$color 
+            |r: $r, 
+            |mass $mass, 
+            |x: $x, 
+            |y: $y,
+            |vX: $vX, 
+            |vY: $vY, 
+            |fX: $forceX, 
+            |fY: $forceY""".trimMargin()
     }
 }

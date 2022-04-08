@@ -16,6 +16,19 @@
         app:h_to_w_ratio="@dimen/gameRatio"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/turtleText"
+        android:layout_width="113dp"
+        android:layout_height="407dp"
+        android:layout_marginTop="-600dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gameView" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

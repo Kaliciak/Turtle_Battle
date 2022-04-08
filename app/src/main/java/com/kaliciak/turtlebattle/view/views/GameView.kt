@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.kaliciak.turtlebattle.R
+import com.kaliciak.turtlebattle.databinding.ActivityGameBinding
 import com.kaliciak.turtlebattle.model.Turtle
 import com.kaliciak.turtlebattle.model.TurtleColor
 import com.kaliciak.turtlebattle.model.TurtleState
@@ -22,8 +23,8 @@ class GameView @JvmOverloads constructor(
         color = ContextCompat.getColor(context, R.color.black)
     }
     var hToWRatio: Float = 20f
-
     var paints: MutableMap<TurtleColor, Paint> = mutableMapOf()
+    var binding: ActivityGameBinding? = null
 
     init {
         context.theme.obtainStyledAttributes(
@@ -70,6 +71,7 @@ class GameView @JvmOverloads constructor(
 
     override fun notifyOnStateChanged() {
         invalidate()
+        binding?.turtleText?.text = viewModel?.getPlayerTurtle().toString()
     }
 
     private fun assignPaints() {
