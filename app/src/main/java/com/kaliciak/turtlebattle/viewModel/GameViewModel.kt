@@ -23,23 +23,33 @@ class GameViewModel(private val resources: Resources,
     private val board: Board
     private var handler = Handler(Looper.getMainLooper())
     private val tickClock: TickClock = TickClock()
-//    private val rotationVectorListener = RotationVectorListener(this,
-//        context.getSystemService(AppCompatActivity.SENSOR_SERVICE) as SensorManager)
-    private lateinit var player: Player
+    private var player: Player
+    private var calibrationData = CalibrationData()
 
     init {
         val turtle = Turtle(20f, 20f, 10f, 1, TurtleColor.BLUE)
         val turtle2 = Turtle(50f, 20f, 10f, 2, TurtleColor.RED)
         val turtle3 = Turtle(100f, 70f, 20f, 3, TurtleColor.WHITE)
         val turtle4 = Turtle((boardWidth/2).toFloat(), (boardHeight/2).toFloat(), 12f, 1, TurtleColor.PURPLE)
-        player = Player(turtle4, context.getSystemService(AppCompatActivity.SENSOR_SERVICE) as SensorManager)
+        player = Player(turtle4, context.getSystemService(AppCompatActivity.SENSOR_SERVICE) as SensorManager, calibrationData)
         val turtles = listOf(turtle, turtle2, turtle3, turtle4)
         board = Board(boardWidth, boardHeight, turtles, fps)
         handler.postDelayed(tickClock, ((1000)/fps).toLong())
     }
 
+    fun calibrate(x: Float, y: Float, z: Float) {
+        calibrationData.x = x
+        calibrationData.y = y
+        calibrationData.z = z
+    }
+
     fun getBoardState(): BoardState {
         return board.getState()
+    }
+
+    fun stop() {
+        handler.removeCallbacksAndMessages(null)
+        player.stop()
     }
 
     inner class TickClock: Runnable {

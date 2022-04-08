@@ -33,6 +33,10 @@ class RotationVectorListener(private val delegate: RotationVectorListenerDelegat
 //        Log.d("listener", "onAccuracyChanged")
     }
 
+    fun stop() {
+        handler.removeCallbacksAndMessages(null)
+    }
+
     inner class RotationClock(private val listener: SensorEventListener): Runnable {
         override fun run() {
             sensorManager.registerListener(listener, sensor, (1000/perSecond))

@@ -25,8 +25,12 @@ class GameActivity : AppCompatActivity() {
         binding.gameView.viewModel = viewModel
 
         setGameViewSize()
+        calibrate()
+    }
 
-
+    override fun onStop() {
+        viewModel?.stop()
+        super.onStop()
     }
 
     private fun setGameViewSize() {
@@ -49,5 +53,12 @@ class GameActivity : AppCompatActivity() {
             width = viewWidth
             height = viewHeight
         }
+    }
+
+    private fun calibrate() {
+        val x = intent.getFloatExtra("xCalibration", 0f)
+        val y = intent.getFloatExtra("yCalibration", 0f)
+        val z = intent.getFloatExtra("zCalibration", 0f)
+        viewModel?.calibrate(x, y, z)
     }
 }

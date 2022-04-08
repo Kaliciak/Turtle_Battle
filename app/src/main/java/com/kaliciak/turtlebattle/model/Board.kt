@@ -16,11 +16,11 @@ class Board(val width: Int,
 
     fun tick() {
         moveTurtles()
-//        Log.d("tick", "tack")
     }
 
     private fun moveTurtles() {
         turtles.forEach(this::moveTurtle)
+        Log.d("turtle", "${turtles[3]}")
     }
 
     private fun moveTurtle(turtle: Turtle) {
@@ -41,7 +41,6 @@ class Board(val width: Int,
         }
 
         checkBorders(turtle)
-//        Log.d("turtle", "$turtle")
     }
 
     private fun computeForces(turtle: Turtle) {
@@ -64,19 +63,19 @@ class Board(val width: Int,
 
     private fun checkBorders(turtle: Turtle) {
         if(turtle.x - turtle.r < 0) {
-            turtle.x += abs(turtle.r - turtle.x)
+            turtle.x += 2 * abs(turtle.r - turtle.x)
             turtle.vX = -turtle.vX * 0.5f
         }
         if(turtle.x + turtle.r > width) {
-            turtle.x -= abs(-width + turtle.x + turtle.r)
+            turtle.x -= 2 * abs(-width + turtle.x + turtle.r)
             turtle.vX = -turtle.vX * 0.5f
         }
         if(turtle.y - turtle.r < 0) {
-            turtle.y += abs(turtle.r - turtle.y)
+            turtle.y += 2 * abs(turtle.r - turtle.y)
             turtle.vY = -turtle.vY * 0.5f
         }
         if(turtle.y + turtle.r > height) {
-            turtle.y -= abs(-height + turtle.y + turtle.r)
+            turtle.y -= 2 * abs(-height + turtle.y + turtle.r)
             turtle.vY = -turtle.vY  * 0.5f
         }
     }
