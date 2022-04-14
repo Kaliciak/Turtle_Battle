@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import com.kaliciak.turtlebattle.databinding.ActivityMainBinding
 import com.kaliciak.turtlebattle.model.CalibrationData
 import com.kaliciak.turtlebattle.services.RotationVectorListenerDelegate
@@ -26,6 +27,7 @@ class MainActivity : AppCompatActivity(), RotationVectorListenerDelegate {
         binding.playButton.setOnClickListener(this::playGame)
         binding.exitButton.setOnClickListener(this::exitApp)
         binding.calibrateButton.setOnClickListener(this::calibrate)
+        binding.defaultCalibrationButton.setOnClickListener(this::defaultCalibration)
         rotationListener = SingleRotationVectorListener(this,
             getSystemService(SENSOR_SERVICE) as SensorManager)
     }
@@ -47,10 +49,18 @@ class MainActivity : AppCompatActivity(), RotationVectorListenerDelegate {
         rotationListener.getData()
     }
 
+    fun defaultCalibration(v: View) {
+        calibrationData.x = 0f
+        calibrationData.y = 0f
+        calibrationData.z = 0f
+        Toast.makeText(this, "Default calibration data", Toast.LENGTH_SHORT).show()
+    }
+
     override fun didChange(valX: Float, valY: Float, valZ: Float) {
         calibrationData.x = valX
         calibrationData.y = valY
         calibrationData.z = valZ
-        Log.d("calibrate", "${calibrationData.x}, ${calibrationData.y}, ${calibrationData.z}")
+//        Log.d("calibrate", "${calibrationData.x}, ${calibrationData.y}, ${calibrationData.z}")
+        Toast.makeText(this, "Calibrated successfully", Toast.LENGTH_SHORT).show()
     }
 }

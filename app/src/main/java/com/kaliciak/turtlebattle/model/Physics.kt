@@ -124,11 +124,16 @@ class Physics {
         }
 
         private fun separate(a: Turtle, b: Turtle) {
+            var aPos = Vector(a.x, a.y)
+            var bPos = Vector(b.x, b.y)
+            val direction = bPos - aPos
             while (doesCollide(a, b)) {
-                a.x += a.vX * 0.001f
-                a.y += a.vY * 0.001f
-                b.x += b.vX * 0.001f
-                b.y += b.vY * 0.001f
+                aPos -= (1/a.mass) * 0.01f * direction
+                bPos += (1/b.mass) * 0.01f * direction
+                a.x = aPos.a
+                a.y = aPos.b
+                b.x = bPos.a
+                b.y = bPos.b
             }
         }
     }
