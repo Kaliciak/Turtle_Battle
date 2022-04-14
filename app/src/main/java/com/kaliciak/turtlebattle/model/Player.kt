@@ -3,13 +3,12 @@ package com.kaliciak.turtlebattle.model
 import android.hardware.SensorManager
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import com.kaliciak.turtlebattle.services.RotationVectorListener
 import com.kaliciak.turtlebattle.services.RotationVectorListenerDelegate
 
 
 class Player(val turtle: Turtle,
-             private val sensorManager: SensorManager,
+             sensorManager: SensorManager,
              private val calibrationData: CalibrationData):
     RotationVectorListenerDelegate {
 
@@ -22,7 +21,6 @@ class Player(val turtle: Turtle,
     var valZ: Float = 0f
         @Synchronized get
         @Synchronized private set
-    var handler = Handler(Looper.getMainLooper())
     private var rotationVectorListener = RotationVectorListener(this, sensorManager)
 
     init {
@@ -41,11 +39,11 @@ class Player(val turtle: Turtle,
     }
 
     fun tick() {
-        turtle.forceX = (valX) * 500
-        turtle.forceY = (-valY) * 500
+        turtle.forceX = (-valX) * 50
+        turtle.forceY = (valY) * 50
     }
 
     fun stop() {
-        handler.removeCallbacksAndMessages(null)
+        rotationVectorListener.stop()
     }
 }

@@ -10,24 +10,13 @@ class RotationVectorListener(private val delegate: RotationVectorListenerDelegat
 )
     : SensorEventListener {
 
-    private val accelerometerReading = FloatArray(3)
-    private val magnetometerReading = FloatArray(3)
-    private val rotationMatrix = FloatArray(9)
-    private val orientationAngles = FloatArray(3)
+    private val gravityReadings = FloatArray(3)
 
     fun start() {
-        sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)?.also { accelerometer ->
+        sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY)?.also { gravity ->
             sensorManager.registerListener(
                 this,
-                accelerometer,
-                SensorManager.SENSOR_DELAY_NORMAL,
-                SensorManager.SENSOR_DELAY_UI
-            )
-        }
-        sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)?.also { magneticField ->
-            sensorManager.registerListener(
-                this,
-                magneticField,
+                gravity,
                 SensorManager.SENSOR_DELAY_NORMAL,
                 SensorManager.SENSOR_DELAY_UI
             )
@@ -35,35 +24,25 @@ class RotationVectorListener(private val delegate: RotationVectorListenerDelegat
     }
 
     override fun onSensorChanged(event: SensorEvent) {
-        if (event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
-            System.arraycopy(event.values, 0, accelerometerReading, 0, accelerometerReading.size)
-        } else if (event.sensor.type == Sensor.TYPE_MAGNETIC_FIELD) {
-            System.arraycopy(event.values, 0, magnetometerReading, 0, magnetometerReading.size)
-        }
-
-        computeOrientation()
+        gravityReadings[0] = event.values[0]
+        gravityReadings[1] = event.values[1]
+        gravityReadings[2] = event.values[2]
         notifyDelegate()
-    }
-
-    private fun computeOrientation() {
-        SensorManager.getRotationMatrix(
-            rotationMatrix,
-            null,
-            accelerometerReading,
-            magnetometerReading
-        )
-        SensorManager.getOrientation(rotationMatrix, orientationAngles)
     }
 
     private fun notifyDelegate() {
         delegate.didChange(
-            orientationAngles[2],
-            orientationAngles[1],
-            orientationAngles[0]
+            gravityReadings[0],
+            gravityReadings[1],
+            gravityReadings[2]
         )
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
 //        Log.d("listener", "onAccuracyChanged")
+    }
+
+    fun stop() {
+        sensorManager.unregisterListener(this)
     }
 }

@@ -1,11 +1,97 @@
 package com.kaliciak.turtlebattle.model
 
 import android.util.Log
+import kotlin.math.abs
+import kotlin.math.sign
 import kotlin.math.sqrt
 
 class Physics {
     companion object {
-        fun collide(a: Turtle, b: Turtle) {
+        fun step(board: Board) {
+            val turtles = board.turtles
+            turtles.forEach{turtle -> processTurtle(turtle, board)}
+        }
+
+        private fun processTurtle(turtle: Turtle, board: Board) {
+            moveTurtle(turtle, board.fps)
+            applyFriction(turtle, board)
+            applyForces(turtle, board.fps)
+            while (!hasValidPosition(turtle, board)) {
+//                Log.d("process", "$turtle")
+                bounceOffBorders(turtle, board)
+                board.turtles.forEach { turtle2 ->
+                    if(turtle != turtle2) {
+                        collide(turtle, turtle2)
+                    }
+                }
+            }
+        }
+
+        private fun moveTurtle(turtle: Turtle, fps: Int) {
+            turtle.x += (turtle.vX / fps)
+            turtle.y += (turtle.vY / fps)
+        }
+
+        private fun applyFriction(turtle: Turtle, board: Board) {
+            turtle.vX *= 1 - (board.friction / board.fps)
+            turtle.vY *= 1 - (board.friction / board.fps)
+        }
+
+        private fun applyForces(turtle: Turtle, fps: Int) {
+            val aX = turtle.forceX / turtle.mass
+            val aY = turtle.forceY / turtle.mass
+            turtle.vX += (aX / fps)
+            turtle.vY += (aY / fps)
+            // when changing the direction
+            if(sign(turtle.vX) != sign(aX)) {
+                turtle.vX += 5 * (aX / fps)
+            }
+            if(sign(turtle.vY) != sign(aY)) {
+                turtle.vY += 5 * (aY / fps)
+            }
+        }
+
+        private fun hasValidPosition(turtle: Turtle, board: Board): Boolean {
+            if(outOfBorders(turtle, board)) {
+                return false
+            }
+            else {
+                board.turtles.forEach { turtle2 ->
+                    if(turtle != turtle2 && doesCollide(turtle, turtle2)) {
+                        return false
+                    }
+                }
+            }
+            return true
+        }
+
+        private fun outOfBorders(turtle: Turtle, board: Board): Boolean {
+            return  turtle.x - turtle.r < 0 ||
+                    turtle.x + turtle.r > board.width ||
+                    turtle.y - turtle.r < 0 ||
+                    turtle.y + turtle.r > board.height
+        }
+
+        private fun bounceOffBorders(turtle: Turtle, board: Board) {
+            if(turtle.x - turtle.r < 0) {
+                turtle.x += 2 * abs(turtle.r - turtle.x)
+                turtle.vX = -turtle.vX * 0.5f
+            }
+            if(turtle.x + turtle.r > board.width) {
+                turtle.x -= 2 * abs(-board.width + turtle.x + turtle.r)
+                turtle.vX = -turtle.vX * 0.5f
+            }
+            if(turtle.y - turtle.r < 0) {
+                turtle.y += 2 * abs(turtle.r - turtle.y)
+                turtle.vY = -turtle.vY * 0.5f
+            }
+            if(turtle.y + turtle.r > board.height) {
+                turtle.y -= 2 * abs(-board.height + turtle.y + turtle.r)
+                turtle.vY = -turtle.vY  * 0.5f
+            }
+        }
+
+        private fun collide(a: Turtle, b: Turtle) {
             if(doesCollide(a, b)) {
                 val vA = getCollisionVector(a, b)
                 val vB = getCollisionVector(b, a)
@@ -39,10 +125,10 @@ class Physics {
 
         private fun separate(a: Turtle, b: Turtle) {
             while (doesCollide(a, b)) {
-                a.x += a.vX * 0.01f
-                a.y += a.vY * 0.01f
-                b.x += b.vX * 0.01f
-                b.y += b.vY * 0.01f
+                a.x += a.vX * 0.001f
+                a.y += a.vY * 0.001f
+                b.x += b.vX * 0.001f
+                b.y += b.vY * 0.001f
             }
         }
     }
