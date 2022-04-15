@@ -4,14 +4,12 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.kaliciak.turtlebattle.R
 import com.kaliciak.turtlebattle.databinding.ActivityGameBinding
-import com.kaliciak.turtlebattle.model.Turtle
-import com.kaliciak.turtlebattle.model.TurtleColor
-import com.kaliciak.turtlebattle.model.TurtleState
+import com.kaliciak.turtlebattle.model.*
+import com.kaliciak.turtlebattle.view.drawing.Drawer
 import com.kaliciak.turtlebattle.viewModel.GameViewModel
 
 class GameView @JvmOverloads constructor(
@@ -55,9 +53,39 @@ class GameView @JvmOverloads constructor(
     }
 
     private fun drawBoard(canvas: Canvas) {
-        viewModel?.getBoardState()?.turtles?.forEach {
+        if(viewModel == null) {
+            return
+        }
+        val board = viewModel!!.getBoardState()
+        drawBorders(canvas, board)
+        board.turtles.forEach {
             drawTurtle(it, canvas)
         }
+    }
+
+    private fun drawBorders(canvas: Canvas, board: BoardState) {
+        drawLeftBorder(canvas, board)
+        drawRightBorder(canvas, board)
+    }
+
+    private fun drawLeftBorder(canvas: Canvas, board: BoardState) {
+        val shape = mutableListOf(Point(0f, canvas.height.toFloat()))
+        shape += board.leftBorder.map { point -> mapPoint(point, canvas, board) }
+        shape += listOf(Point(0f, 0f))
+        Drawer.drawPoly(canvas, paints[TurtleColor.BLUE]!!, shape)
+    }
+
+    private fun drawRightBorder(canvas: Canvas, board: BoardState) {
+        val shape = mutableListOf(Point(canvas.width.toFloat(), canvas.height.toFloat()))
+        shape += board.rightBorder.map { point -> mapPoint(point, canvas, board) }
+        shape += listOf(Point(canvas.width.toFloat(), 0f))
+        Drawer.drawPoly(canvas, paints[TurtleColor.BLUE]!!, shape)
+    }
+
+    private fun mapPoint(point: Point, canvas: Canvas, board: BoardState): Point {
+        val widthFactor = canvas.width.toFloat() / board.width
+        val heightFactor = canvas.height.toFloat() / board.height
+        return Point(point.x * widthFactor, point.y * heightFactor)
     }
 
     override fun onDraw(canvas: Canvas?) {
