@@ -7,6 +7,7 @@ import kotlin.math.sqrt
 
 class Physics {
     companion object {
+        val friction = 0.1f
         fun step(board: Board) {
             val turtles = board.turtles
             turtles.forEach{turtle -> processTurtle(turtle, board)}
@@ -22,7 +23,7 @@ class Physics {
                 board.turtles.forEach { turtle2 ->
                     if(turtle != turtle2) {
                         collide(turtle, turtle2)
-                    }
+                     }
                 }
             }
         }
@@ -33,8 +34,8 @@ class Physics {
         }
 
         private fun applyFriction(turtle: Turtle, board: Board) {
-            turtle.vX *= 1 - (board.friction / board.fps)
-            turtle.vY *= 1 - (board.friction / board.fps)
+            turtle.vX *= 1 - (friction / board.fps)
+            turtle.vY *= 1 - (friction / board.fps)
         }
 
         private fun applyForces(turtle: Turtle, fps: Int) {

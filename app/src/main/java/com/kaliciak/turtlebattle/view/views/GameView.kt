@@ -70,14 +70,14 @@ class GameView @JvmOverloads constructor(
 
     private fun drawLeftBorder(canvas: Canvas, board: BoardState) {
         val shape = mutableListOf(Point(0f, canvas.height.toFloat()))
-        shape += board.leftBorder.map { point -> mapPoint(point, canvas, board) }
+        shape += board.coastline.left.map { point -> mapPoint(point, canvas, board) }
         shape += listOf(Point(0f, 0f))
         Drawer.drawPoly(canvas, paints[TurtleColor.BLUE]!!, shape)
     }
 
     private fun drawRightBorder(canvas: Canvas, board: BoardState) {
         val shape = mutableListOf(Point(canvas.width.toFloat(), canvas.height.toFloat()))
-        shape += board.rightBorder.map { point -> mapPoint(point, canvas, board) }
+        shape += board.coastline.right.map { point -> mapPoint(point, canvas, board) }
         shape += listOf(Point(canvas.width.toFloat(), 0f))
         Drawer.drawPoly(canvas, paints[TurtleColor.BLUE]!!, shape)
     }
