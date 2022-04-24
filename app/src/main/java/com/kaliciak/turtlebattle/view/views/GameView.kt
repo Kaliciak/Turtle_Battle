@@ -102,6 +102,13 @@ class GameView @JvmOverloads constructor(
         binding?.turtleText?.text = viewModel?.getPlayerTurtle().toString()
     }
 
+    override fun gameOver(name: String, turtleColor: TurtleColor) {
+        binding?.turtleNameText?.text = name
+        binding?.turtleNameText?.visibility = VISIBLE
+        binding?.turtleNameText?.setTextColor(paints[turtleColor]!!.color)
+        binding?.wonText?.visibility = VISIBLE
+    }
+
     private fun assignPaints() {
         paints[TurtleColor.BLACK] = Paint(0).apply { color = ContextCompat.getColor(context, R.color.black) }
         paints[TurtleColor.WHITE] = Paint(0).apply { color = ContextCompat.getColor(context, R.color.white) }

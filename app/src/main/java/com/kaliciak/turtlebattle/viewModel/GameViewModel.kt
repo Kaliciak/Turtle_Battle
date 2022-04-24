@@ -12,7 +12,7 @@ import com.kaliciak.turtlebattle.view.views.GameViewDelegate
 
 class GameViewModel(private val resources: Resources,
                     private val context: Context,
-                    private val delegate: GameViewDelegate) {
+                    private val delegate: GameViewDelegate): GameViewModelDelegate {
     val boardWidth = resources.getInteger(R.integer.gameWidth)
     val boardHeight = resources.getInteger(R.integer.gameHeight)
     private val fps = 30
@@ -21,15 +21,14 @@ class GameViewModel(private val resources: Resources,
     private val tickClock: TickClock = TickClock()
     private var player: Player
     private var calibrationData = CalibrationData()
+    private var stopped = false
 
     init {
-        val turtle = Turtle(20f, 20f, 10f, 1f, TurtleColor.BLUE)
-        val turtle2 = Turtle(50f, 20f, 10f, 2f, TurtleColor.RED)
-        val turtle3 = Turtle(100f, 70f, 20f, 3f, TurtleColor.WHITE)
-        val turtle4 = Turtle((boardWidth/2).toFloat(), (boardHeight/2).toFloat(), 12f, 2f, TurtleColor.PURPLE)
-        player = Player(turtle4, context.getSystemService(AppCompatActivity.SENSOR_SERVICE) as SensorManager, calibrationData)
-        val turtles = listOf(turtle, turtle2, turtle3, turtle4)
-        board = Board(boardWidth, boardHeight, turtles, fps)
+        val turtle1 = Turtle((boardWidth/2).toFloat(), (boardHeight/2).toFloat(), 12f, 2f, TurtleColor.PURPLE)
+        val turtle2 = Turtle((boardWidth/2).toFloat(), 50f, 12f, 2f, TurtleColor.RED)
+        player = Player(turtle1, context.getSystemService(AppCompatActivity.SENSOR_SERVICE) as SensorManager, calibrationData)
+        val turtles = listOf(turtle1, turtle2)
+        board = Board(boardWidth, boardHeight, turtles, fps, this)
         handler.postDelayed(tickClock, ((1000)/fps).toLong())
     }
 
@@ -45,6 +44,7 @@ class GameViewModel(private val resources: Resources,
 
     fun stop() {
         handler.removeCallbacksAndMessages(null)
+        stopped = true
         player.stop()
     }
 
@@ -52,12 +52,25 @@ class GameViewModel(private val resources: Resources,
         return player.turtle
     }
 
+    override fun gameOver(turtle: Turtle?) {
+        if(turtle == null) {
+            delegate.gameOver("NONE", TurtleColor.WHITE)
+        }
+        else {
+            val color = turtle.color
+            delegate.gameOver(color.name, color)
+        }
+        stop()
+    }
+
     inner class TickClock: Runnable {
         override fun run() {
             board.tick()
             player.tick()
             delegate.notifyOnStateChanged()
-            handler.postDelayed(this, ((1000)/fps).toLong())
+            if(!stopped) {
+                handler.postDelayed(this, ((1000)/fps).toLong())
+            }
         }
     }
 }

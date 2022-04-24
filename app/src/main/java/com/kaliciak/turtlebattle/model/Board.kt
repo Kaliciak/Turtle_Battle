@@ -1,9 +1,12 @@
 package com.kaliciak.turtlebattle.model
 
+import com.kaliciak.turtlebattle.viewModel.GameViewModelDelegate
+
 class Board(val width: Int,
             val height: Int,
             var turtles: List<Turtle>,
-            val fps: Int) {
+            val fps: Int,
+            val delegate: GameViewModelDelegate) {
 
     private val coastlineManager = CoastlineManager(width, height, fps)
 
@@ -56,5 +59,9 @@ class Board(val width: Int,
         coastlineManager.step()
         Physics.step(this)
         checkCoastline()
+
+        if(turtles.size <= 1) {
+            delegate.gameOver(turtles.first())
+        }
     }
 }

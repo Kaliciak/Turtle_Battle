@@ -32,4 +32,40 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/gameView" />
 
+    <com.kaliciak.turtlebattle.view.views.OutlinedTextView
+        android:id="@+id/turtleNameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5px"
+        android:paddingRight="5px"
+        android:shadowColor="@color/black"
+        android:shadowRadius="2"
+        android:text="YOLO"
+        android:textColor="@color/white"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/gameView"
+        app:layout_constraintEnd_toEndOf="@+id/gameView"
+        app:layout_constraintStart_toStartOf="@+id/gameView"
+        app:layout_constraintTop_toTopOf="@+id/gameView"
+        app:layout_constraintVertical_bias="0.31" />
+
+    <com.kaliciak.turtlebattle.view.views.OutlinedTextView
+        android:id="@+id/wonText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5px"
+        android:paddingRight="5px"
+        android:shadowColor="@color/black"
+        android:shadowRadius="2"
+        android:text="WON!"
+        android:textColor="@color/white"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/turtleNameText"
+        app:layout_constraintStart_toStartOf="@+id/turtleNameText"
+        app:layout_constraintTop_toBottomOf="@+id/turtleNameText" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

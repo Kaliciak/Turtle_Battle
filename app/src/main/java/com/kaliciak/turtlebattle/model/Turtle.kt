@@ -7,8 +7,8 @@ class Turtle(var x: Float,
              var color: TurtleColor) {
     var forceX = 0f
     var forceY = 0f
-    var vX = 50f
-    var vY = 50f
+    var vX = 0f
+    var vY = 0f
 
     fun getState(): TurtleState {
         return TurtleState(x, y, r, color)
