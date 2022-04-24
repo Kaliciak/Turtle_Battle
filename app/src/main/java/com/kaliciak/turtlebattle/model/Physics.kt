@@ -67,10 +67,10 @@ class Physics {
         }
 
         private fun outOfBorders(turtle: Turtle, board: Board): Boolean {
-            return  turtle.x - turtle.r < 0 ||
-                    turtle.x + turtle.r > board.width ||
-                    turtle.y - turtle.r < 0 ||
+            return turtle.y - turtle.r < 0 ||
                     turtle.y + turtle.r > board.height
+//                    turtle.x - turtle.r < 0 ||
+//                    turtle.x + turtle.r > board.width
         }
 
         private fun bounceOffBorders(turtle: Turtle, board: Board) {

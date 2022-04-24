@@ -45,8 +45,9 @@ class Board(val width: Int,
     private fun checkCoastline() {
         val newTurtles = turtles.toMutableList()
         turtles.forEach { turtle ->
-            if(isOutsideCoastline(turtle))
+            if(isOutsideCoastline(turtle)) {
                 newTurtles.remove(turtle)
+            }
         }
         turtles = newTurtles
     }

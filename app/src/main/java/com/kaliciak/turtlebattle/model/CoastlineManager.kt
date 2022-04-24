@@ -2,6 +2,8 @@ package com.kaliciak.turtlebattle.model
 
 import android.util.Log
 import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
 import kotlin.random.Random
 
 class CoastlineManager(private val width: Int, private val height: Int, private val fps: Int) {
@@ -21,9 +23,18 @@ class CoastlineManager(private val width: Int, private val height: Int, private 
         coastline = Coastline(leftCoast, rightCoast)
     }
 
-    private val speed = height.toFloat() / 4
-    private val minLandWidth = width * (1f/3f)
-    private val maxDerivation = width * (1f/5f)
+    private var speed = height.toFloat() * (1f/10f)
+    private val maxSpeed = height.toFloat() * (1f/2f)
+    private val acceleration =  height.toFloat() * (1f/0100f)
+
+    private var minLandWidth = width * (2f/3f)
+    private val limLandWidth = width * (1f/4f)
+    private val landWidthAcc = width * (1f/200f)
+
+    private var maxDerivation = width * (1f/10f)
+    private val limDerivation = width * (1f/3f)
+    private val derivationAcc = width * (1f/200f)
+
     private val vSpace = height * (1f/5f)
 
     private fun reduceCoast(coast: List<Point>): List<Point> {
@@ -54,7 +65,7 @@ class CoastlineManager(private val width: Int, private val height: Int, private 
             var leftX = 0f
             var rightX = 0f
 
-            while(abs(leftX - rightX) < minLandWidth
+            while(rightX - leftX < minLandWidth
                 || leftX < 0 || rightX > width) {
                 leftX = getRandomShift(prevLeftX)
                 rightX = getRandomShift(prevRightX)
@@ -81,5 +92,11 @@ class CoastlineManager(private val width: Int, private val height: Int, private 
         leftCoast = reduceCoast(leftCoast)
         rightCoast = reduceCoast(rightCoast)
         coastline = expandCoastline(Coastline(leftCoast, rightCoast))
+
+        speed = min(maxSpeed, speed + acceleration/fps)
+        minLandWidth = max(limLandWidth, minLandWidth - landWidthAcc/fps)
+        maxDerivation = min(limDerivation, maxDerivation + derivationAcc/fps)
+//        Log.d(null, "$speed, $minLandWidth, $maxDerivation")
+//        Log.d(null, "$coastline")
     }
 }
