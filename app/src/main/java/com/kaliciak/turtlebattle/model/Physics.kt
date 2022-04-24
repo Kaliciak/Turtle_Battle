@@ -74,14 +74,14 @@ class Physics {
         }
 
         private fun bounceOffBorders(turtle: Turtle, board: Board) {
-            if(turtle.x - turtle.r < 0) {
-                turtle.x += 2 * abs(turtle.r - turtle.x)
-                turtle.vX = -turtle.vX * 0.5f
-            }
-            if(turtle.x + turtle.r > board.width) {
-                turtle.x -= 2 * abs(-board.width + turtle.x + turtle.r)
-                turtle.vX = -turtle.vX * 0.5f
-            }
+//            if(turtle.x - turtle.r < 0) {
+//                turtle.x += 2 * abs(turtle.r - turtle.x)
+//                turtle.vX = -turtle.vX * 0.5f
+//            }
+//            if(turtle.x + turtle.r > board.width) {
+//                turtle.x -= 2 * abs(-board.width + turtle.x + turtle.r)
+//                turtle.vX = -turtle.vX * 0.5f
+//            }
             if(turtle.y - turtle.r < 0) {
                 turtle.y += 2 * abs(turtle.r - turtle.y)
                 turtle.vY = -turtle.vY * 0.5f

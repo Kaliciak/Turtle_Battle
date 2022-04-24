@@ -80,8 +80,6 @@ class CoastlineManager(private val width: Int, private val height: Int, private 
 
         leftCoast = reduceCoast(leftCoast)
         rightCoast = reduceCoast(rightCoast)
-        Log.d("coast", "$coastline")
         coastline = expandCoastline(Coastline(leftCoast, rightCoast))
-        Log.d("coast", "$coastline")
     }
 }
