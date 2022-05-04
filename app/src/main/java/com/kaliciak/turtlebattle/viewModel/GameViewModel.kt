@@ -24,8 +24,8 @@ class GameViewModel(private val resources: Resources,
     private var stopped = false
 
     init {
-        val turtle1 = Turtle((boardWidth/2).toFloat(), (boardHeight/2).toFloat(), 12f, 2f, TurtleColor.PURPLE)
-        val turtle2 = Turtle((boardWidth/2).toFloat(), 50f, 12f, 2f, TurtleColor.RED)
+        val turtle1 = Turtle((boardWidth/2).toFloat(), (boardHeight/2).toFloat(), 15f, 2f, TurtleColor.PURPLE)
+        val turtle2 = Turtle((boardWidth/2).toFloat(), 50f, 15f, 2f, TurtleColor.RED)
         player = Player(turtle1, context.getSystemService(AppCompatActivity.SENSOR_SERVICE) as SensorManager, calibrationData)
         val turtles = listOf(turtle1, turtle2)
         board = Board(boardWidth, boardHeight, turtles, fps, this)

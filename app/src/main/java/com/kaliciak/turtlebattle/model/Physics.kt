@@ -1,13 +1,12 @@
 package com.kaliciak.turtlebattle.model
 
-import android.util.Log
 import kotlin.math.abs
 import kotlin.math.sign
 import kotlin.math.sqrt
 
 class Physics {
     companion object {
-        val friction = 0.1f
+        val friction = 0.01f
         fun step(board: Board) {
             val turtles = board.turtles
             turtles.forEach{turtle -> processTurtle(turtle, board)}

@@ -23,6 +23,8 @@ class Player(val turtle: Turtle,
         @Synchronized private set
     private var rotationVectorListener = RotationVectorListener(this, sensorManager)
 
+    private val forceMultiplier = 100
+
     init {
         turtle.vX = 0f
         turtle.vY = 0f
@@ -39,8 +41,8 @@ class Player(val turtle: Turtle,
     }
 
     fun tick() {
-        turtle.forceX = (-valX) * 50
-        turtle.forceY = (valY) * 50
+        turtle.forceX = (-valX) * forceMultiplier
+        turtle.forceY = (valY) * forceMultiplier
     }
 
     fun stop() {
