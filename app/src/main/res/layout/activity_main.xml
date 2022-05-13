@@ -21,29 +21,6 @@
         app:layout_constraintVertical_bias="0.396" />
 
     <Button
-        android:id="@+id/calibrateButton"
-        android:layout_width="130dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:text="CALIBRATE"
-        android:textSize="12sp"
-        android:visibility="visible"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/defaultCalibrationButton"
-        android:layout_width="130dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="5dp"
-        android:text="DEFAULT CALIBRATION"
-        android:textSize="12sp"
-        android:visibility="visible"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/calibrateButton" />
-
-    <Button
         android:id="@+id/exitButton"
         android:layout_width="210dp"
         android:layout_height="80dp"

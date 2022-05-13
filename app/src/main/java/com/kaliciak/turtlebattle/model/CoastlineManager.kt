@@ -1,7 +1,5 @@
 package com.kaliciak.turtlebattle.model
 
-import android.util.Log
-import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.random.Random
