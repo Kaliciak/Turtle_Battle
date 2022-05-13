@@ -1,17 +1,18 @@
-package com.kaliciak.turtlebattle.services
+package com.kaliciak.turtlebattle.services.sensors
 
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 
-class SingleRotationVectorListener(private val delegate: RotationVectorListenerDelegate,
-                                   private val sensorManager: SensorManager)
+class RotationVectorListener(private val delegate: RotationVectorListenerDelegate,
+                             private val sensorManager: SensorManager
+)
     : SensorEventListener {
 
     private val gravityReadings = FloatArray(3)
 
-    fun getData() {
+    fun start() {
         sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY)?.also { gravity ->
             sensorManager.registerListener(
                 this,
@@ -26,7 +27,6 @@ class SingleRotationVectorListener(private val delegate: RotationVectorListenerD
         gravityReadings[0] = event.values[0]
         gravityReadings[1] = event.values[1]
         gravityReadings[2] = event.values[2]
-        sensorManager.unregisterListener(this)
         notifyDelegate()
     }
 
@@ -40,5 +40,9 @@ class SingleRotationVectorListener(private val delegate: RotationVectorListenerD
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
 //        Log.d("listener", "onAccuracyChanged")
+    }
+
+    fun stop() {
+        sensorManager.unregisterListener(this)
     }
 }

@@ -1,10 +1,8 @@
 package com.kaliciak.turtlebattle.model
 
 import android.hardware.SensorManager
-import android.os.Handler
-import android.os.Looper
-import com.kaliciak.turtlebattle.services.RotationVectorListener
-import com.kaliciak.turtlebattle.services.RotationVectorListenerDelegate
+import com.kaliciak.turtlebattle.services.sensors.RotationVectorListener
+import com.kaliciak.turtlebattle.services.sensors.RotationVectorListenerDelegate
 
 
 class Player(val turtle: Turtle,

@@ -1,16 +1,11 @@
 package com.kaliciak.turtlebattle.view
 
 import android.content.Intent
-import android.hardware.SensorManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.Toast
 import com.kaliciak.turtlebattle.databinding.ActivityMainBinding
 import com.kaliciak.turtlebattle.model.CalibrationData
-import com.kaliciak.turtlebattle.services.RotationVectorListenerDelegate
-import com.kaliciak.turtlebattle.services.SingleRotationVectorListener
 import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity() {

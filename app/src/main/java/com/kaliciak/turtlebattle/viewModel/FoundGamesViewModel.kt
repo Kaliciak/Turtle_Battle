@@ -1,19 +1,24 @@
 package com.kaliciak.turtlebattle.viewModel
 
-import android.content.Context
+import android.annotation.SuppressLint
 import android.hardware.SensorManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import com.kaliciak.turtlebattle.model.CalibrationData
-import com.kaliciak.turtlebattle.services.RotationVectorListenerDelegate
-import com.kaliciak.turtlebattle.services.SingleRotationVectorListener
+import com.kaliciak.turtlebattle.services.bluetooth.BluetoothSearchGameService
+import com.kaliciak.turtlebattle.services.sensors.RotationVectorListenerDelegate
+import com.kaliciak.turtlebattle.services.sensors.SingleRotationVectorListener
 
-class FoundGamesViewModel(private val context: Context): RotationVectorListenerDelegate {
+class FoundGamesViewModel(private val activity: FragmentActivity): RotationVectorListenerDelegate {
     var calibrationData = CalibrationData()
         private set
 
     private var rotationListener: SingleRotationVectorListener = SingleRotationVectorListener(this,
-        context.getSystemService(AppCompatActivity.SENSOR_SERVICE) as SensorManager
+        activity.getSystemService(AppCompatActivity.SENSOR_SERVICE) as SensorManager
     )
+
+    @SuppressLint("NewApi")
+    private val searchGameService: BluetoothSearchGameService = BluetoothSearchGameService(activity)
 
     fun calibrate() {
         rotationListener.getData()
