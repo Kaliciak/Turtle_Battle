@@ -1,16 +1,25 @@
 package com.kaliciak.turtlebattle.view
 
+import android.Manifest
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kaliciak.turtlebattle.databinding.ActivityFoundGamesBinding
 import com.kaliciak.turtlebattle.view.adapters.FoundGamesRecViewAdapter
 import com.kaliciak.turtlebattle.viewModel.FoundGamesViewModel
 
-class FoundGamesActivity : AppCompatActivity() {
+class FoundGamesActivity: AppCompatActivity(), FoundGamesActivityDelegate {
     private lateinit var binding: ActivityFoundGamesBinding
     private var viewModel: FoundGamesViewModel? = null
     private val adapter = FoundGamesRecViewAdapter()
@@ -21,13 +30,22 @@ class FoundGamesActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        viewModel = FoundGamesViewModel(this)
+        viewModel = FoundGamesViewModel(this, this)
 
         binding.fgPlayButton.setOnClickListener(this::playGame)
         binding.calibrateButton.setOnClickListener(this::calibrate)
         binding.defaultCalibrationButton.setOnClickListener(this::defaultCalibration)
         binding.foundGamesList.adapter = adapter
         binding.foundGamesList.layoutManager = LinearLayoutManager(this)
+
+        binding.testButton.setOnClickListener {
+            viewModel?.scan()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel?.onDestroy()
     }
 
     private fun playGame(v: View) {
@@ -47,5 +65,9 @@ class FoundGamesActivity : AppCompatActivity() {
     private fun defaultCalibration(v: View) {
         viewModel?.defaultCalibration()
         Toast.makeText(this, "Default calibration data", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun foundDevice() {
+        adapter.updateData(viewModel!!.getDeviceList())
     }
 }

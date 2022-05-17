@@ -1,13 +1,17 @@
 package com.kaliciak.turtlebattle.view.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.kaliciak.turtlebattle.databinding.FoundGameListItemBinding
+import com.kaliciak.turtlebattle.model.bluetooth.Device
 
 class FoundGamesRecViewAdapter:
 RecyclerView.Adapter<FoundGamesRecViewAdapter.ViewHolder>() {
+
+    private var deviceList: List<Device> = listOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -16,16 +20,24 @@ RecyclerView.Adapter<FoundGamesRecViewAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(position)
+        holder.bind(deviceList[position])
     }
 
-    override fun getItemCount(): Int = 5
+    override fun getItemCount(): Int = deviceList.size
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateData(deviceList: List<Device>) {
+        this.deviceList = deviceList
+        notifyDataSetChanged()
+    }
 
     inner class ViewHolder(val binding: FoundGameListItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        val gameTitle: TextView = binding.gameTitle
+        val deviceName: TextView = binding.deviceName
+        val deviceMAC: TextView = binding.deviceMAC
 
-        fun bind(position: Int) {
-            gameTitle.text = "TEST $position"
+        fun bind(device: Device) {
+            deviceName.text = device.name
+            deviceMAC.text = device.mac
         }
     }
 
