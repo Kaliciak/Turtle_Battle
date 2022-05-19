@@ -7,8 +7,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.kaliciak.turtlebattle.databinding.FoundGameListItemBinding
 import com.kaliciak.turtlebattle.model.bluetooth.Device
+import com.kaliciak.turtlebattle.view.GameJoinActivityDelegate
 
-class FoundGamesRecViewAdapter:
+class FoundGamesRecViewAdapter(var delegate: GameJoinActivityDelegate):
 RecyclerView.Adapter<FoundGamesRecViewAdapter.ViewHolder>() {
 
     private var deviceList: List<Device> = listOf()
@@ -38,6 +39,10 @@ RecyclerView.Adapter<FoundGamesRecViewAdapter.ViewHolder>() {
         fun bind(device: Device) {
             deviceName.text = device.name
             deviceMAC.text = device.mac
+
+            binding.joinGameButton.setOnClickListener {
+                delegate.joinDevice(device.mac)
+            }
         }
     }
 

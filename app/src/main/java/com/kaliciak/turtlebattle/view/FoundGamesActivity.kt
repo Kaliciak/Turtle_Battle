@@ -1,28 +1,19 @@
 package com.kaliciak.turtlebattle.view
 
-import android.Manifest
-import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothDevice
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
-import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kaliciak.turtlebattle.databinding.ActivityFoundGamesBinding
 import com.kaliciak.turtlebattle.view.adapters.FoundGamesRecViewAdapter
 import com.kaliciak.turtlebattle.viewModel.FoundGamesViewModel
 
-class FoundGamesActivity: AppCompatActivity(), FoundGamesActivityDelegate {
+class FoundGamesActivity: AppCompatActivity(), FoundGamesActivityDelegate, GameJoinActivityDelegate {
     private lateinit var binding: ActivityFoundGamesBinding
     private var viewModel: FoundGamesViewModel? = null
-    private val adapter = FoundGamesRecViewAdapter()
+    private val adapter = FoundGamesRecViewAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +29,7 @@ class FoundGamesActivity: AppCompatActivity(), FoundGamesActivityDelegate {
         binding.foundGamesList.adapter = adapter
         binding.foundGamesList.layoutManager = LinearLayoutManager(this)
 
-        binding.testButton.setOnClickListener {
+        binding.refreshButton.setOnClickListener {
             viewModel?.scan()
         }
     }
@@ -54,6 +45,8 @@ class FoundGamesActivity: AppCompatActivity(), FoundGamesActivityDelegate {
         intent.putExtra("xCalibration", calibrationData?.x ?: 0f)
         intent.putExtra("yCalibration", calibrationData?.y ?: 0f)
         intent.putExtra("zCalibration", calibrationData?.z ?: 0f)
+        viewModel?.startGame()
+        intent.putExtra("isHost", true)
         startActivity(intent)
     }
 
@@ -68,6 +61,12 @@ class FoundGamesActivity: AppCompatActivity(), FoundGamesActivityDelegate {
     }
 
     override fun foundDevice() {
-        adapter.updateData(viewModel!!.getDeviceList())
+        if(viewModel != null) {
+            adapter.updateData(viewModel!!.getDeviceList())
+        }
+    }
+
+    override fun joinDevice(mac: String) {
+        viewModel?.joinGame(mac)
     }
 }

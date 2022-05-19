@@ -67,4 +67,12 @@ class FoundGamesViewModel(
         deviceList = mutableListOf()
         delegate.foundDevice()
     }
+
+    fun startGame() {
+        searchGameService.stopScan()
+    }
+
+    fun joinGame(mac: String) {
+        searchGameService.joinGame(mac)
+    }
 }

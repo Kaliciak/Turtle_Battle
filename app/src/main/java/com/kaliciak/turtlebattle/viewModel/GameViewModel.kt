@@ -6,13 +6,15 @@ import android.hardware.SensorManager
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import com.kaliciak.turtlebattle.R
 import com.kaliciak.turtlebattle.model.*
-import com.kaliciak.turtlebattle.view.views.GameViewDelegate
+import com.kaliciak.turtlebattle.services.bluetooth.BluetoothGameHostService
+import com.kaliciak.turtlebattle.view.GameActivityDelegate
 
 class GameViewModel(private val resources: Resources,
-                    private val context: Context,
-                    private val delegate: GameViewDelegate): GameViewModelDelegate {
+                    private val activity: FragmentActivity,
+                    private val delegate: GameActivityDelegate): GameViewModelDelegate {
     val boardWidth = resources.getInteger(R.integer.gameWidth)
     val boardHeight = resources.getInteger(R.integer.gameHeight)
     private val fps = 30
@@ -23,13 +25,13 @@ class GameViewModel(private val resources: Resources,
     private var calibrationData = CalibrationData()
     private var stopped = false
 
+    private val hostService = BluetoothGameHostService(activity, this)
+
     init {
         val turtle1 = Turtle((boardWidth/2).toFloat(), (boardHeight/2).toFloat(), 15f, 2f, TurtleColor.PURPLE)
-        val turtle2 = Turtle((boardWidth/2).toFloat(), 50f, 15f, 2f, TurtleColor.RED)
-        player = Player(turtle1, context.getSystemService(AppCompatActivity.SENSOR_SERVICE) as SensorManager, calibrationData)
-        val turtles = listOf(turtle1, turtle2)
+        player = Player(turtle1, activity.getSystemService(AppCompatActivity.SENSOR_SERVICE) as SensorManager, calibrationData)
+        val turtles = listOf(turtle1)
         board = Board(boardWidth, boardHeight, turtles, fps, this)
-        handler.postDelayed(tickClock, ((1000)/fps).toLong())
     }
 
     fun calibrate(x: Float, y: Float, z: Float) {
@@ -40,6 +42,11 @@ class GameViewModel(private val resources: Resources,
 
     fun getBoardState(): BoardState {
         return board.getState()
+    }
+
+    fun startGame() {
+        delegate.startGame()
+        handler.postDelayed(tickClock, ((1000)/fps).toLong())
     }
 
     fun stop() {
@@ -61,6 +68,14 @@ class GameViewModel(private val resources: Resources,
             delegate.gameOver(color.name, color)
         }
         stop()
+    }
+
+    override fun playerConnected() {
+        val turtle2 = Turtle((boardWidth/2).toFloat(), 50f, 15f, 2f, TurtleColor.RED)
+        val mTurtles = board.turtles.toMutableList()
+        mTurtles.add(turtle2)
+        board.turtles = mTurtles
+        delegate.notifyOnStateChanged()
     }
 
     inner class TickClock: Runnable {

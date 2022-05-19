@@ -14,7 +14,7 @@ import com.kaliciak.turtlebattle.viewModel.GameViewModel
 
 class GameView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : View(context, attrs, defStyleAttr), GameViewDelegate {
+) : View(context, attrs, defStyleAttr) {
     var viewModel: GameViewModel? = null
 
     var paint: Paint = Paint(0).apply {
@@ -97,16 +97,9 @@ class GameView @JvmOverloads constructor(
         }
     }
 
-    override fun notifyOnStateChanged() {
+    fun notifyOnStateChanged() {
         invalidate()
         binding?.turtleText?.text = viewModel?.getPlayerTurtle().toString()
-    }
-
-    override fun gameOver(name: String, turtleColor: TurtleColor) {
-        binding?.turtleNameText?.text = name
-        binding?.turtleNameText?.visibility = VISIBLE
-        binding?.turtleNameText?.setTextColor(paints[turtleColor]!!.color)
-        binding?.wonText?.visibility = VISIBLE
     }
 
     private fun assignPaints() {

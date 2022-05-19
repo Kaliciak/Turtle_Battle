@@ -1,3 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Turtle Battle</string>
+    <string name="game_service_uuid" tools:ignore="TypographyDashes,Typos">CBA5BF1E-D461-11EC-9D64-0242AC120002</string>
 </resources>

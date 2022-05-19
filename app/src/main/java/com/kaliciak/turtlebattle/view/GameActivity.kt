@@ -1,15 +1,17 @@
 package com.kaliciak.turtlebattle.view
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.updateLayoutParams
 import com.kaliciak.turtlebattle.Utility
 import com.kaliciak.turtlebattle.databinding.ActivityGameBinding
+import com.kaliciak.turtlebattle.model.TurtleColor
 import com.kaliciak.turtlebattle.viewModel.GameViewModel
 import kotlin.math.round
 
 
-class GameActivity : AppCompatActivity() {
+class GameActivity: AppCompatActivity(), GameActivityDelegate {
     private lateinit var binding: ActivityGameBinding
     private var viewModel: GameViewModel? = null
 
@@ -20,8 +22,15 @@ class GameActivity : AppCompatActivity() {
         setContentView(view)
 
         if(viewModel == null) {
-            viewModel = GameViewModel(resources, this, binding.gameView)
+            viewModel = GameViewModel(resources, this, this)
         }
+
+        val isHost = intent.getBooleanExtra("isHost", false)
+
+        binding.startGameButton.setOnClickListener {
+            viewModel?.startGame()
+        }
+
         binding.gameView.viewModel = viewModel
         binding.gameView.binding = binding
         setGameViewSize()
@@ -60,5 +69,21 @@ class GameActivity : AppCompatActivity() {
         val y = intent.getFloatExtra("yCalibration", 0f)
         val z = intent.getFloatExtra("zCalibration", 0f)
         viewModel?.calibrate(x, y, z)
+    }
+
+    override fun notifyOnStateChanged() {
+        binding.gameView.notifyOnStateChanged()
+    }
+
+    override fun gameOver(name: String, turtleColor: TurtleColor) {
+        binding.turtleNameText.text = name
+        binding.turtleNameText.visibility = View.VISIBLE
+        binding.turtleNameText.setTextColor(binding.gameView.paints[turtleColor]!!.color)
+        binding.wonText.visibility = View.VISIBLE
+    }
+
+    override fun startGame() {
+        binding.startGameButton.visibility = View.INVISIBLE
+        binding.waitingText.visibility = View.INVISIBLE
     }
 }

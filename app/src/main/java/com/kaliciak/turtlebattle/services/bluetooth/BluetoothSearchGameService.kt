@@ -1,7 +1,6 @@
 package com.kaliciak.turtlebattle.services.bluetooth
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothClass
@@ -14,13 +13,14 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
+import com.kaliciak.turtlebattle.R
 import com.kaliciak.turtlebattle.model.bluetooth.Device
-import com.kaliciak.turtlebattle.view.FoundGamesActivityDelegate
 import com.kaliciak.turtlebattle.viewModel.FoundGamesViewModelDelegate
+import java.lang.Exception
 import java.util.*
 
 class BluetoothSearchGameService(
@@ -28,13 +28,14 @@ class BluetoothSearchGameService(
     private val delegate: FoundGamesViewModelDelegate) {
     private val bluetoothManager: BluetoothManager = activity.getSystemService(BluetoothManager::class.java)
     private val bluetoothAdapter: BluetoothAdapter? = bluetoothManager.adapter
+    private val uuid = UUID.fromString(activity.resources.getString(R.string.game_service_uuid))
 
     // Intent request codes
     private val REQUEST_CONNECT_DEVICE_SECURE = 1
     private val REQUEST_CONNECT_DEVICE_INSECURE = 2
     private val REQUEST_ENABLE_BT = 3
 
-    private val uuid = UUID.fromString("cba5bf1e-d461-11ec-9d64-0242ac120002")
+    private var conThr: ConnectThread? = null
 
     private var resultLauncher = activity.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if(result.resultCode != RESULT_OK) {
@@ -45,7 +46,6 @@ class BluetoothSearchGameService(
     private val deviceReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             val action = intent.action
-
             // When discovery finds a device
             if (BluetoothDevice.ACTION_FOUND == action) {
                 // Get the BluetoothDevice object from the Intent
@@ -63,10 +63,12 @@ class BluetoothSearchGameService(
                     }
                 }
 
-                Log.d("data", "${device?.bluetoothClass?.deviceClass} ${intent.getStringExtra(BluetoothDevice.EXTRA_NAME)}")
+                if(device == null) {
+                    return
+                }
+                Log.d("data", "${device.bluetoothClass?.deviceClass} ${intent.getStringExtra(BluetoothDevice.EXTRA_NAME)}")
 
-
-                if (device != null && device.bluetoothClass.deviceClass == BluetoothClass.Device.PHONE_SMART) {
+                if(device.bluetoothClass.deviceClass == BluetoothClass.Device.PHONE_SMART) {
                     val name = intent.getStringExtra(BluetoothDevice.EXTRA_NAME)
                     val mac = device.address
                     val deviceStruct = Device(name ?: "N/A", mac)
@@ -77,27 +79,15 @@ class BluetoothSearchGameService(
         }
     }
 
+
     init {
         getPermissions()
 
-        val discoverableIntent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE)
-        discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            if (ActivityCompat.checkSelfPermission(
-                    activity,
-                    Manifest.permission.BLUETOOTH_ADVERTISE
-                ) == PackageManager.PERMISSION_GRANTED
-            ) {
-                activity.startActivity(discoverableIntent)
-            }
-        } else {
-            activity.startActivity(discoverableIntent)
-        }
-
         // Register for broadcasts when a device is discovered
         val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
-        filter.addAction(BluetoothDevice.EXTRA_NAME)
         activity.registerReceiver(deviceReceiver, filter)
+
+        scan()
     }
 
     private fun getPermissions() {
@@ -165,6 +155,8 @@ class BluetoothSearchGameService(
     }
 
     fun scan() {
+        stopScan()
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if (ActivityCompat.checkSelfPermission(
                     activity,
@@ -176,16 +168,13 @@ class BluetoothSearchGameService(
             }
         }
 
-        if(bluetoothAdapter?.isDiscovering == true) {
-            bluetoothAdapter.cancelDiscovery()
-        }
-
         delegate.restartScan()
         val result = bluetoothAdapter?.startDiscovery()
         Log.d("s" , "$result")
     }
 
     fun stopScan() {
+        Log.d("scan", "stop")
         if (ActivityCompat.checkSelfPermission(
                 activity,
                 Manifest.permission.BLUETOOTH_SCAN
@@ -197,5 +186,38 @@ class BluetoothSearchGameService(
         }
     }
 
+    fun joinGame(mac: String) {
+        Log.d("join", mac)
+        stopScan()
+        Toast.makeText(activity, "Connecting to $mac", Toast.LENGTH_SHORT).show()
+        conThr = ConnectThread(mac)
+        conThr?.start()
+    }
 
+    inner class ConnectThread(private val mac: String): Thread() {
+        override fun run() {
+            super.run()
+            val device = bluetoothAdapter?.getRemoteDevice(mac) ?: return
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (ActivityCompat.checkSelfPermission(
+                        activity,
+                        Manifest.permission.BLUETOOTH_CONNECT
+                    ) != PackageManager.PERMISSION_GRANTED ) {
+                    return
+                }
+            }
+            try {
+                val socket = device.createRfcommSocketToServiceRecord(uuid)
+                Log.d("sock", "$socket")
+                socket.connect()
+                activity.runOnUiThread {
+                    Toast.makeText(activity, "Connected", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                activity.runOnUiThread {
+                    Toast.makeText(activity, "Couldn't connect", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
 }

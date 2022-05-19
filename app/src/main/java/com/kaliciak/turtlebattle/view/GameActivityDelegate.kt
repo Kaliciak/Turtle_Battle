@@ -1,8 +1,9 @@
-package com.kaliciak.turtlebattle.view.views
+package com.kaliciak.turtlebattle.view
 
 import com.kaliciak.turtlebattle.model.TurtleColor
 
-interface GameViewDelegate {
+interface GameActivityDelegate {
     fun notifyOnStateChanged()
     fun gameOver(name: String, turtleColor: TurtleColor)
+    fun startGame()
 }
