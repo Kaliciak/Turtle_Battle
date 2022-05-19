@@ -23,7 +23,9 @@ class FoundGamesActivity: AppCompatActivity(), FoundGamesActivityDelegate, GameJ
 
         viewModel = FoundGamesViewModel(this, this)
 
-        binding.fgPlayButton.setOnClickListener(this::playGame)
+        binding.fgPlayButton.setOnClickListener {
+            playGame(true)
+        }
         binding.calibrateButton.setOnClickListener(this::calibrate)
         binding.defaultCalibrationButton.setOnClickListener(this::defaultCalibration)
         binding.foundGamesList.adapter = adapter
@@ -39,14 +41,14 @@ class FoundGamesActivity: AppCompatActivity(), FoundGamesActivityDelegate, GameJ
         viewModel?.onDestroy()
     }
 
-    private fun playGame(v: View) {
+    private fun playGame(isHost: Boolean) {
         val intent = Intent(this, GameActivity::class.java)
         val calibrationData = viewModel?.calibrationData
         intent.putExtra("xCalibration", calibrationData?.x ?: 0f)
         intent.putExtra("yCalibration", calibrationData?.y ?: 0f)
         intent.putExtra("zCalibration", calibrationData?.z ?: 0f)
         viewModel?.startGame()
-        intent.putExtra("isHost", true)
+        intent.putExtra("isHost", isHost)
         startActivity(intent)
     }
 
@@ -64,6 +66,10 @@ class FoundGamesActivity: AppCompatActivity(), FoundGamesActivityDelegate, GameJ
         if(viewModel != null) {
             adapter.updateData(viewModel!!.getDeviceList())
         }
+    }
+
+    override fun joinedGame() {
+        playGame(false)
     }
 
     override fun joinDevice(mac: String) {

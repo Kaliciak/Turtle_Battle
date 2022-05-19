@@ -213,6 +213,8 @@ class BluetoothSearchGameService(
                 activity.runOnUiThread {
                     Toast.makeText(activity, "Connected", Toast.LENGTH_SHORT).show()
                 }
+                BluetoothSavedState.socket = socket
+                delegate.joinedGame()
             } catch (e: Exception) {
                 activity.runOnUiThread {
                     Toast.makeText(activity, "Couldn't connect", Toast.LENGTH_SHORT).show()

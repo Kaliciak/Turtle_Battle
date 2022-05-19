@@ -21,7 +21,8 @@ class CoastlineManager(private val width: Int, private val height: Int, private 
         coastline = Coastline(leftCoast, rightCoast)
     }
 
-    private var speed = height.toFloat() * (1f/10f)
+    var speed = height.toFloat() * (1f/10f)
+        private set
     private val maxSpeed = height.toFloat() * (1f/2f)
     private val acceleration =  height.toFloat() * (1f/0100f)
 

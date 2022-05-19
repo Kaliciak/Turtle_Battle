@@ -68,6 +68,10 @@ class FoundGamesViewModel(
         delegate.foundDevice()
     }
 
+    override fun joinedGame() {
+        delegate.joinedGame()
+    }
+
     fun startGame() {
         searchGameService.stopScan()
     }

@@ -7,6 +7,8 @@ import androidx.core.view.updateLayoutParams
 import com.kaliciak.turtlebattle.Utility
 import com.kaliciak.turtlebattle.databinding.ActivityGameBinding
 import com.kaliciak.turtlebattle.model.TurtleColor
+import com.kaliciak.turtlebattle.viewModel.GameHostViewModel
+import com.kaliciak.turtlebattle.viewModel.GamePlayerViewModel
 import com.kaliciak.turtlebattle.viewModel.GameViewModel
 import kotlin.math.round
 
@@ -21,11 +23,21 @@ class GameActivity: AppCompatActivity(), GameActivityDelegate {
         val view = binding.root
         setContentView(view)
 
-        if(viewModel == null) {
-            viewModel = GameViewModel(resources, this, this)
-        }
-
         val isHost = intent.getBooleanExtra("isHost", false)
+
+        if(isHost) {
+            if(viewModel == null) {
+                viewModel = GameHostViewModel(this, this)
+            }
+        }
+        else {
+            if(viewModel == null) {
+                viewModel = GamePlayerViewModel(this, this)
+            }
+
+            startGame()
+//            viewModel?.startGame()
+        }
 
         binding.startGameButton.setOnClickListener {
             viewModel?.startGame()
@@ -75,6 +87,15 @@ class GameActivity: AppCompatActivity(), GameActivityDelegate {
         binding.gameView.notifyOnStateChanged()
     }
 
+    override fun playerConnected() {
+        runOnUiThread {
+            binding.waitingText.visibility = View.INVISIBLE
+            binding.readyText.visibility = View.VISIBLE
+            binding.startGameButton.visibility = View.VISIBLE
+        }
+        notifyOnStateChanged()
+    }
+
     override fun gameOver(name: String, turtleColor: TurtleColor) {
         binding.turtleNameText.text = name
         binding.turtleNameText.visibility = View.VISIBLE
@@ -85,5 +106,6 @@ class GameActivity: AppCompatActivity(), GameActivityDelegate {
     override fun startGame() {
         binding.startGameButton.visibility = View.INVISIBLE
         binding.waitingText.visibility = View.INVISIBLE
+        binding.readyText.visibility = View.INVISIBLE
     }
 }

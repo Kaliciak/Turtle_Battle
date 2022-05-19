@@ -1,12 +1,18 @@
 package com.kaliciak.turtlebattle.model
 
+import android.util.Log
 import com.kaliciak.turtlebattle.viewModel.GameViewModelDelegate
+import java.lang.Exception
 
 class Board(val width: Int,
             val height: Int,
-            var turtles: List<Turtle>,
+            turtles: List<Turtle>,
             val fps: Int,
             val delegate: GameViewModelDelegate) {
+
+    var turtles: List<Turtle> = turtles
+        @Synchronized set
+        @Synchronized get
 
     private val coastlineManager = CoastlineManager(width, height, fps)
 
@@ -62,6 +68,30 @@ class Board(val width: Int,
 
         if(turtles.size <= 1) {
             delegate.gameOver(turtles.first())
+        }
+    }
+
+    @Synchronized
+    fun getBoardData(): BoardData {
+        val turtlesDataList = mutableListOf<TurtleData>()
+        for(turtle in turtles) {
+            val turtleData = turtle.getTurtleData()
+            turtlesDataList.add(turtleData)
+        }
+
+        return BoardData(turtlesDataList, coastlineManager.coastline, coastlineManager.speed)
+    }
+
+    @Synchronized
+    fun applyBoardData(boardData: BoardData) {
+        val turtlesData = boardData.turtles
+        for(turtleData in turtlesData) {
+            try {
+                val turtle = turtles.first { it.color == turtleData.color }
+                turtle.applyTurtleData(turtleData)
+            } catch (e: Exception) {
+                Log.d("EXCEPTION", "${turtleData.color} turtle not found")
+            }
         }
     }
 }

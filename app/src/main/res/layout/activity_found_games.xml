@@ -48,15 +48,16 @@
 
     <Button
         android:id="@+id/fgPlayButton"
-        android:layout_width="125dp"
+        android:layout_width="0dp"
         android:layout_height="80dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginBottom="30dp"
         android:text="NEW GAME"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/refreshButton" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/foundGamesList"
@@ -71,11 +72,14 @@
 
     <Button
         android:id="@+id/refreshButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="42dp"
-        android:text="REFRESH"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="32dp"
+        android:text="REFRESH LIST"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/fgPlayButton"
         app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

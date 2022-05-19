@@ -99,7 +99,6 @@ class GameView @JvmOverloads constructor(
 
     fun notifyOnStateChanged() {
         invalidate()
-        binding?.turtleText?.text = viewModel?.getPlayerTurtle().toString()
     }
 
     private fun assignPaints() {

@@ -11,17 +11,19 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
 import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
 import com.kaliciak.turtlebattle.R
-import com.kaliciak.turtlebattle.viewModel.GameViewModelDelegate
+import com.kaliciak.turtlebattle.viewModel.GameHostViewModelDelegate
+import java.io.InputStream
+import java.io.OutputStream
 import java.util.*
 
 class BluetoothGameHostService(
     private val activity: FragmentActivity,
-    private val delegate: GameViewModelDelegate) {
+    private val delegate: GameHostViewModelDelegate
+) {
     private val REQUEST_ENABLE_BT = 3
 
     private val bluetoothManager: BluetoothManager = activity.getSystemService(BluetoothManager::class.java)
@@ -29,6 +31,8 @@ class BluetoothGameHostService(
     private val uuid = UUID.fromString(activity.resources.getString(R.string.game_service_uuid))
     private var serverSocket: BluetoothServerSocket? = null
     private var socket: BluetoothSocket? = null
+    private var inputStream: InputStream? = null
+    private var outputStream: OutputStream? = null
     private var acceptThread: AcceptThread? = null
 
     private val forResultLauncher = activity.registerForActivityResult(
@@ -45,6 +49,14 @@ class BluetoothGameHostService(
     init {
         getPermissions()
         makeVisible()
+    }
+
+    fun sendTestMessage() {
+        try {
+            outputStream?.write(89)
+        } catch (e: Exception) {
+            Log.d("EXCEPTION", "$e")
+        }
     }
 
     private fun startServer() {
@@ -144,6 +156,8 @@ class BluetoothGameHostService(
         override fun run() {
             super.run()
             socket = serverSocket?.accept()
+            inputStream = socket?.inputStream
+            outputStream = socket?.outputStream
             delegate.playerConnected()
             Log.d("socket", "acc $serverSocket")
         }
