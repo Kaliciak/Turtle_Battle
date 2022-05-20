@@ -1,4 +1,4 @@
-package com.kaliciak.turtlebattle.view
+package com.kaliciak.turtlebattle.view.foundGames
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -7,10 +7,12 @@ import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kaliciak.turtlebattle.databinding.ActivityFoundGamesBinding
+import com.kaliciak.turtlebattle.view.game.GameActivity
 import com.kaliciak.turtlebattle.view.adapters.FoundGamesRecViewAdapter
-import com.kaliciak.turtlebattle.viewModel.FoundGamesViewModel
+import com.kaliciak.turtlebattle.viewModel.foundGames.FoundGamesViewModel
 
-class FoundGamesActivity: AppCompatActivity(), FoundGamesActivityDelegate, GameJoinActivityDelegate {
+class FoundGamesActivity: AppCompatActivity(), FoundGamesActivityDelegate,
+    GameJoinActivityDelegate {
     private lateinit var binding: ActivityFoundGamesBinding
     private var viewModel: FoundGamesViewModel? = null
     private val adapter = FoundGamesRecViewAdapter(this)

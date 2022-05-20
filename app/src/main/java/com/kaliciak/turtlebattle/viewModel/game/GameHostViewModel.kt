@@ -1,19 +1,28 @@
-package com.kaliciak.turtlebattle.viewModel
+package com.kaliciak.turtlebattle.viewModel.game
 
 import android.hardware.SensorManager
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import com.kaliciak.turtlebattle.R
 import com.kaliciak.turtlebattle.model.*
+import com.kaliciak.turtlebattle.model.board.Board
+import com.kaliciak.turtlebattle.model.board.BoardState
+import com.kaliciak.turtlebattle.model.turtle.Turtle
+import com.kaliciak.turtlebattle.model.turtle.TurtleColor
+import com.kaliciak.turtlebattle.model.turtle.TurtleForcesData
 import com.kaliciak.turtlebattle.services.bluetooth.BluetoothGameHostService
-import com.kaliciak.turtlebattle.services.bluetooth.BluetoothGamePlayerService
-import com.kaliciak.turtlebattle.view.GameActivityDelegate
+import com.kaliciak.turtlebattle.view.game.GameActivityDelegate
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
-class GamePlayerViewModel(private val activity: FragmentActivity,
-                          private val delegate: GameActivityDelegate):
-    GamePlayerViewModelDelegate,
+class GameHostViewModel(private val activity: FragmentActivity,
+                        private val delegate: GameActivityDelegate
+):
+    GameHostViewModelDelegate,
     GameViewModel {
 
     override val boardWidth = activity.resources.getInteger(R.integer.gameWidth)
@@ -25,13 +34,13 @@ class GamePlayerViewModel(private val activity: FragmentActivity,
     private var player: Player
     private var calibrationData = CalibrationData()
     private var stopped = false
-    private val bluetoothService = BluetoothGamePlayerService(this)
+
+    private val hostService = BluetoothGameHostService(activity, this)
 
     init {
         val turtle1 = Turtle((boardWidth/2).toFloat() - 50f, (boardHeight/2).toFloat(), 15f, 2f, TurtleColor.PURPLE)
-        val turtle2 = Turtle((boardWidth/2).toFloat() + 50f, (boardHeight/2).toFloat(), 15f, 2f, TurtleColor.RED)
-        player = Player(turtle2, activity.getSystemService(AppCompatActivity.SENSOR_SERVICE) as SensorManager, calibrationData)
-        val turtles = listOf(turtle1, turtle2)
+        player = Player(turtle1, activity.getSystemService(AppCompatActivity.SENSOR_SERVICE) as SensorManager, calibrationData)
+        val turtles = listOf(turtle1)
         board = Board(boardWidth, boardHeight, turtles, fps, this)
     }
 
@@ -46,10 +55,9 @@ class GamePlayerViewModel(private val activity: FragmentActivity,
     }
 
     override fun startGame() {
-        activity.runOnUiThread {
-            delegate.startGame()
-            handler.postDelayed(tickClock, ((1000)/fps).toLong())
-        }
+        hostService.sendStartMessage()
+        delegate.startGame()
+        handler.postDelayed(tickClock, ((1000)/fps).toLong())
     }
 
     override fun stop() {
@@ -73,9 +81,28 @@ class GamePlayerViewModel(private val activity: FragmentActivity,
         stop()
     }
 
+    override fun playerConnected() {
+        val turtle2 = Turtle((boardWidth/2).toFloat() + 50f, (boardHeight/2).toFloat(), 15f, 2f, TurtleColor.RED)
+        val mTurtles = board.turtles.toMutableList()
+        mTurtles.add(turtle2)
+        board.turtles = mTurtles
+        delegate.playerConnected()
+    }
 
-    override fun gameStarted() {
-        startGame()
+    fun sendBoardData() {
+        val boardData = board.getBoardData()
+        val message = Json.encodeToString(boardData)
+        hostService.sendBoardData(message)
+    }
+
+    override fun gotMessage(message: String) {
+        try {
+            val forcesData = Json.decodeFromString<TurtleForcesData>(message)
+            board.applyForcesData(forcesData)
+            sendBoardData()
+        } catch (e: Exception) {
+            Log.d("EXCEPTION", "$e")
+        }
     }
 
     inner class TickClock: Runnable {

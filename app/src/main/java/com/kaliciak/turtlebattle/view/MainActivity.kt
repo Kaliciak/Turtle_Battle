@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import com.kaliciak.turtlebattle.databinding.ActivityMainBinding
 import com.kaliciak.turtlebattle.model.CalibrationData
+import com.kaliciak.turtlebattle.view.foundGames.FoundGamesActivity
 import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity() {

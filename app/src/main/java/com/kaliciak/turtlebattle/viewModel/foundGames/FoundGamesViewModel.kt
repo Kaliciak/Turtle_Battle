@@ -1,4 +1,4 @@
-package com.kaliciak.turtlebattle.viewModel
+package com.kaliciak.turtlebattle.viewModel.foundGames
 import android.hardware.SensorManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
@@ -7,11 +7,12 @@ import com.kaliciak.turtlebattle.model.bluetooth.Device
 import com.kaliciak.turtlebattle.services.bluetooth.BluetoothSearchGameService
 import com.kaliciak.turtlebattle.services.sensors.RotationVectorListenerDelegate
 import com.kaliciak.turtlebattle.services.sensors.SingleRotationVectorListener
-import com.kaliciak.turtlebattle.view.FoundGamesActivityDelegate
+import com.kaliciak.turtlebattle.view.foundGames.FoundGamesActivityDelegate
 
 class FoundGamesViewModel(
     private val activity: FragmentActivity,
-    private val delegate: FoundGamesActivityDelegate):
+    private val delegate: FoundGamesActivityDelegate
+):
     RotationVectorListenerDelegate, FoundGamesViewModelDelegate {
     var calibrationData = CalibrationData()
         private set

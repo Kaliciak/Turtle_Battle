@@ -1,4 +1,4 @@
-package com.kaliciak.turtlebattle.view
+package com.kaliciak.turtlebattle.view.game
 
 import android.os.Bundle
 import android.view.View
@@ -6,10 +6,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.updateLayoutParams
 import com.kaliciak.turtlebattle.Utility
 import com.kaliciak.turtlebattle.databinding.ActivityGameBinding
-import com.kaliciak.turtlebattle.model.TurtleColor
-import com.kaliciak.turtlebattle.viewModel.GameHostViewModel
-import com.kaliciak.turtlebattle.viewModel.GamePlayerViewModel
-import com.kaliciak.turtlebattle.viewModel.GameViewModel
+import com.kaliciak.turtlebattle.model.turtle.TurtleColor
+import com.kaliciak.turtlebattle.viewModel.game.GameHostViewModel
+import com.kaliciak.turtlebattle.viewModel.game.GamePlayerViewModel
+import com.kaliciak.turtlebattle.viewModel.game.GameViewModel
 import kotlin.math.round
 
 

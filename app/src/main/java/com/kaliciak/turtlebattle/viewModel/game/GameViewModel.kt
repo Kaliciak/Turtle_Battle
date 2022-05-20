@@ -1,7 +1,6 @@
-package com.kaliciak.turtlebattle.viewModel
+package com.kaliciak.turtlebattle.viewModel.game
 
-import com.kaliciak.turtlebattle.R
-import com.kaliciak.turtlebattle.model.BoardState
+import com.kaliciak.turtlebattle.model.board.BoardState
 
 interface GameViewModel: GameViewModelDelegate {
     val boardWidth: Int

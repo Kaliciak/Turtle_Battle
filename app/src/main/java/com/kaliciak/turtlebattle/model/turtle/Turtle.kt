@@ -1,10 +1,11 @@
-package com.kaliciak.turtlebattle.model
+package com.kaliciak.turtlebattle.model.turtle
 
 class Turtle(x: Float,
              y: Float,
              var r: Float,
              var mass: Float,
-             var color: TurtleColor) {
+             var color: TurtleColor
+) {
 
     var x: Float = x
         @Synchronized set
@@ -39,6 +40,17 @@ class Turtle(x: Float,
             |vY: $vY, 
             |fX: $forceX, 
             |fY: $forceY""".trimMargin()
+    }
+
+    @Synchronized
+    fun getForcesData(): TurtleForcesData {
+        return TurtleForcesData(forceX, forceY, color)
+    }
+
+    @Synchronized
+    fun applyForcesData(forcesData: TurtleForcesData) {
+        forceX = forcesData.forceX
+        forceY = forcesData.forceY
     }
 
     @Synchronized

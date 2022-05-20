@@ -1,4 +1,4 @@
-package com.kaliciak.turtlebattle.viewModel
+package com.kaliciak.turtlebattle.viewModel.foundGames
 
 import com.kaliciak.turtlebattle.model.bluetooth.Device
 

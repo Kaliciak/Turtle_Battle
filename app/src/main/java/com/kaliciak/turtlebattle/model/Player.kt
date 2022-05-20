@@ -1,6 +1,7 @@
 package com.kaliciak.turtlebattle.model
 
 import android.hardware.SensorManager
+import com.kaliciak.turtlebattle.model.turtle.Turtle
 import com.kaliciak.turtlebattle.services.sensors.RotationVectorListener
 import com.kaliciak.turtlebattle.services.sensors.RotationVectorListenerDelegate
 

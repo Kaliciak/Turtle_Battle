@@ -1,5 +1,6 @@
-package com.kaliciak.turtlebattle.model
+package com.kaliciak.turtlebattle.model.board
 
+import com.kaliciak.turtlebattle.model.turtle.Turtle
 import kotlin.math.abs
 import kotlin.math.sign
 import kotlin.math.sqrt
@@ -9,7 +10,7 @@ class Physics {
         val friction = 0.01f
         fun step(board: Board) {
             val turtles = board.turtles
-            turtles.forEach{turtle -> processTurtle(turtle, board)}
+            turtles.forEach{turtle -> processTurtle(turtle, board) }
         }
 
         private fun processTurtle(turtle: Turtle, board: Board) {

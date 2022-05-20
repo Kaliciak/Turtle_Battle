@@ -8,9 +8,12 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import com.kaliciak.turtlebattle.R
 import com.kaliciak.turtlebattle.databinding.ActivityGameBinding
-import com.kaliciak.turtlebattle.model.*
+import com.kaliciak.turtlebattle.model.board.BoardState
+import com.kaliciak.turtlebattle.model.board.coastline.Point
+import com.kaliciak.turtlebattle.model.turtle.TurtleColor
+import com.kaliciak.turtlebattle.model.turtle.TurtleState
 import com.kaliciak.turtlebattle.view.drawing.Drawer
-import com.kaliciak.turtlebattle.viewModel.GameViewModel
+import com.kaliciak.turtlebattle.viewModel.game.GameViewModel
 
 class GameView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0

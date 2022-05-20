@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.kaliciak.turtlebattle.databinding.FoundGameListItemBinding
 import com.kaliciak.turtlebattle.model.bluetooth.Device
-import com.kaliciak.turtlebattle.view.GameJoinActivityDelegate
+import com.kaliciak.turtlebattle.view.foundGames.GameJoinActivityDelegate
 
 class FoundGamesRecViewAdapter(var delegate: GameJoinActivityDelegate):
 RecyclerView.Adapter<FoundGamesRecViewAdapter.ViewHolder>() {

@@ -1,4 +1,4 @@
-package com.kaliciak.turtlebattle.model
+package com.kaliciak.turtlebattle.model.board.coastline
 
 import kotlin.math.max
 import kotlin.math.min
@@ -16,7 +16,8 @@ class CoastlineManager(private val width: Int, private val height: Int, private 
 
         val rightCoast = mutableListOf(
             Point(width.toFloat(), height.toFloat()),
-            Point(width.toFloat(), 0f))
+            Point(width.toFloat(), 0f)
+        )
 
         coastline = Coastline(leftCoast, rightCoast)
     }
@@ -35,6 +36,11 @@ class CoastlineManager(private val width: Int, private val height: Int, private 
     private val derivationAcc = width * (1f/200f)
 
     private val vSpace = height * (1f/5f)
+
+    fun applyCoastline(coastline: Coastline, speed: Float) {
+        this.coastline = coastline
+        this.speed = speed
+    }
 
     private fun reduceCoast(coast: List<Point>): List<Point> {
         val result = coast.toMutableList()

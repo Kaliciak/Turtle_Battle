@@ -3,7 +3,7 @@ package com.kaliciak.turtlebattle.view.drawing
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
-import com.kaliciak.turtlebattle.model.Point
+import com.kaliciak.turtlebattle.model.board.coastline.Point
 
 class Drawer {
     companion object {

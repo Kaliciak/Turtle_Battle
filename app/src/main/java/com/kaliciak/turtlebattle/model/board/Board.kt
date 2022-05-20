@@ -1,14 +1,21 @@
-package com.kaliciak.turtlebattle.model
+package com.kaliciak.turtlebattle.model.board
 
 import android.util.Log
-import com.kaliciak.turtlebattle.viewModel.GameViewModelDelegate
+import com.kaliciak.turtlebattle.model.board.coastline.Coastline
+import com.kaliciak.turtlebattle.model.board.coastline.CoastlineManager
+import com.kaliciak.turtlebattle.model.board.coastline.Point
+import com.kaliciak.turtlebattle.model.turtle.Turtle
+import com.kaliciak.turtlebattle.model.turtle.TurtleData
+import com.kaliciak.turtlebattle.model.turtle.TurtleForcesData
+import com.kaliciak.turtlebattle.viewModel.game.GameViewModelDelegate
 import java.lang.Exception
 
 class Board(val width: Int,
             val height: Int,
             turtles: List<Turtle>,
             val fps: Int,
-            val delegate: GameViewModelDelegate) {
+            val delegate: GameViewModelDelegate
+) {
 
     var turtles: List<Turtle> = turtles
         @Synchronized set
@@ -92,6 +99,18 @@ class Board(val width: Int,
             } catch (e: Exception) {
                 Log.d("EXCEPTION", "${turtleData.color} turtle not found")
             }
+        }
+
+        coastlineManager.applyCoastline(boardData.coastline, boardData.speed)
+    }
+
+    @Synchronized
+    fun applyForcesData(forcesData: TurtleForcesData) {
+        try {
+            val turtle = turtles.first { it.color == forcesData.color }
+            turtle.applyForcesData(forcesData)
+        } catch (e: Exception) {
+            Log.d("EXCEPTION", "${forcesData.color} turtle not found")
         }
     }
 }

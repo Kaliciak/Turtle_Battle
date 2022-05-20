@@ -15,7 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
 import com.kaliciak.turtlebattle.R
-import com.kaliciak.turtlebattle.viewModel.GameHostViewModelDelegate
+import com.kaliciak.turtlebattle.viewModel.game.GameHostViewModelDelegate
 import java.io.InputStream
 import java.io.OutputStream
 import java.util.*
@@ -25,6 +25,7 @@ class BluetoothGameHostService(
     private val delegate: GameHostViewModelDelegate
 ) {
     private val REQUEST_ENABLE_BT = 3
+    private val charset = Charsets.UTF_8
 
     private val bluetoothManager: BluetoothManager = activity.getSystemService(BluetoothManager::class.java)
     private val bluetoothAdapter: BluetoothAdapter? = bluetoothManager.adapter
@@ -34,6 +35,8 @@ class BluetoothGameHostService(
     private var inputStream: InputStream? = null
     private var outputStream: OutputStream? = null
     private var acceptThread: AcceptThread? = null
+    private var listenThread: ListenThread? = null
+    private var sendThread: SendThread? = null
 
     private val forResultLauncher = activity.registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -51,12 +54,17 @@ class BluetoothGameHostService(
         makeVisible()
     }
 
-    fun sendTestMessage() {
+    fun sendStartMessage() {
         try {
             outputStream?.write(89)
         } catch (e: Exception) {
             Log.d("EXCEPTION", "$e")
         }
+    }
+
+    fun sendBoardData(message: String) {
+        sendThread = SendThread(message)
+        sendThread?.start()
     }
 
     private fun startServer() {
@@ -150,7 +158,6 @@ class BluetoothGameHostService(
                     serverSocket = bluetoothAdapter?.listenUsingRfcommWithServiceRecord("TURTLE BATTLE", uuid)
 
             }
-            Log.d("socket", "$socket")
         }
 
         override fun run() {
@@ -160,6 +167,36 @@ class BluetoothGameHostService(
             outputStream = socket?.outputStream
             delegate.playerConnected()
             Log.d("socket", "acc $serverSocket")
+            listenThread = ListenThread()
+            listenThread?.start()
+        }
+    }
+
+    inner class ListenThread: Thread() {
+        override fun run() {
+            super.run()
+            while(true) {
+                val received = ByteArray(1024)
+                val bytes = inputStream?.read(received)
+                if (bytes == null || bytes <= 0) {
+                    Log.d("received", "$bytes")
+                    Log.d("inpstr", "$inputStream")
+                }
+                else {
+                    val str = String(received.copyOfRange(0, bytes), charset)
+                    Log.d("received", str)
+                    delegate.gotMessage(str)
+                }
+            }
+        }
+    }
+
+    inner class SendThread(private val message: String): Thread() {
+        override fun run() {
+            super.run()
+            val bytes = message.toByteArray(charset)
+            outputStream?.write(bytes)
+//            Log.d("written", message)
         }
     }
 }

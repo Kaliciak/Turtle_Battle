@@ -19,13 +19,14 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
 import com.kaliciak.turtlebattle.R
 import com.kaliciak.turtlebattle.model.bluetooth.Device
-import com.kaliciak.turtlebattle.viewModel.FoundGamesViewModelDelegate
+import com.kaliciak.turtlebattle.viewModel.foundGames.FoundGamesViewModelDelegate
 import java.lang.Exception
 import java.util.*
 
 class BluetoothSearchGameService(
     private val activity: FragmentActivity,
-    private val delegate: FoundGamesViewModelDelegate) {
+    private val delegate: FoundGamesViewModelDelegate
+) {
     private val bluetoothManager: BluetoothManager = activity.getSystemService(BluetoothManager::class.java)
     private val bluetoothAdapter: BluetoothAdapter? = bluetoothManager.adapter
     private val uuid = UUID.fromString(activity.resources.getString(R.string.game_service_uuid))

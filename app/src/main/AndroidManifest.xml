@@ -24,11 +24,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TurtleBattle" >
         <activity
-            android:name=".view.FoundGamesActivity"
+            android:name=".view.foundGames.FoundGamesActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.GameActivity"
+            android:name=".view.game.GameActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity

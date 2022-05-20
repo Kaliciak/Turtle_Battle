@@ -1,6 +1,6 @@
-package com.kaliciak.turtlebattle.view
+package com.kaliciak.turtlebattle.view.game
 
-import com.kaliciak.turtlebattle.model.TurtleColor
+import com.kaliciak.turtlebattle.model.turtle.TurtleColor
 
 interface GameActivityDelegate {
     fun notifyOnStateChanged()
