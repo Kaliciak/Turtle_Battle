@@ -29,7 +29,7 @@ class GamePlayerViewModel(private val activity: FragmentActivity,
     override val boardHeight = activity.resources.getInteger(R.integer.gameHeight)
     private val fps = 30
     // messages per second
-    private val mps = 5
+    private val mps = 10
     private val board: Board
     private var handler = Handler(Looper.getMainLooper())
     private val tickClock = TickClock()
@@ -95,6 +95,7 @@ class GamePlayerViewModel(private val activity: FragmentActivity,
             delegate.gameOver(color.name, color)
         }
 
+        delegate.notifyOnStateChanged()
         stopGame()
     }
 
