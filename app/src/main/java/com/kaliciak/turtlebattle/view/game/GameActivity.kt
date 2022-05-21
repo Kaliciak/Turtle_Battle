@@ -43,6 +43,10 @@ class GameActivity: AppCompatActivity(), GameActivityDelegate {
             viewModel?.startGame()
         }
 
+        binding.backButton.setOnClickListener {
+            finish()
+        }
+
         binding.gameView.viewModel = viewModel
         binding.gameView.binding = binding
         setGameViewSize()
@@ -102,6 +106,7 @@ class GameActivity: AppCompatActivity(), GameActivityDelegate {
             binding.turtleNameText.visibility = View.VISIBLE
             binding.turtleNameText.setTextColor(binding.gameView.paints[turtleColor]!!.color)
             binding.wonText.visibility = View.VISIBLE
+            binding.backButton.visibility = View.VISIBLE
         }
     }
 

@@ -13,7 +13,6 @@ import com.kaliciak.turtlebattle.model.board.BoardData
 import com.kaliciak.turtlebattle.model.board.BoardState
 import com.kaliciak.turtlebattle.model.turtle.Turtle
 import com.kaliciak.turtlebattle.model.turtle.TurtleColor
-import com.kaliciak.turtlebattle.model.turtle.TurtleForcesData
 import com.kaliciak.turtlebattle.services.bluetooth.BluetoothGamePlayerService
 import com.kaliciak.turtlebattle.view.game.GameActivityDelegate
 import kotlinx.serialization.decodeFromString
