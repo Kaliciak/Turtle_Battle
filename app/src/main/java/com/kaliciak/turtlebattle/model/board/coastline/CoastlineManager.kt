@@ -1,5 +1,6 @@
 package com.kaliciak.turtlebattle.model.board.coastline
 
+import com.kaliciak.turtlebattle.model.turtle.Turtle
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.random.Random
@@ -103,5 +104,31 @@ class CoastlineManager(private val width: Int, private val height: Int, private 
         maxDerivation = min(limDerivation, maxDerivation + derivationAcc/fps)
 //        Log.d(null, "$speed, $minLandWidth, $maxDerivation")
 //        Log.d(null, "$coastline")
+    }
+
+    private fun getCoastX(lowerPoint: Point, upperPoint: Point, y: Float): Float {
+        return lowerPoint.x - (lowerPoint.x - upperPoint.x) * (lowerPoint.y - y) / (lowerPoint.y - upperPoint.y)
+    }
+
+    fun isOutsideCoastline(turtle: Turtle): Boolean {
+        if(turtle.x < 0 || turtle.x > width) {
+            return true
+        }
+
+        var prevY = coastline.left[0].y
+        var nextY = coastline.left[1].y
+        var index = 1
+        while(turtle.y !in nextY..prevY) {
+            prevY = nextY
+            index += 1
+            nextY = coastline.left[index].y
+        }
+
+        if(turtle.x < getCoastX(coastline.left[index-1], coastline.left[index], turtle.y) ||
+            turtle.x > getCoastX(coastline.right[index-1], coastline.right[index], turtle.y)) {
+            return true
+        }
+
+        return false
     }
 }

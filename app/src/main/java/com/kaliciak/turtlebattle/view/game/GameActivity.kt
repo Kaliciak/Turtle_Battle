@@ -97,15 +97,19 @@ class GameActivity: AppCompatActivity(), GameActivityDelegate {
     }
 
     override fun gameOver(name: String, turtleColor: TurtleColor) {
-        binding.turtleNameText.text = name
-        binding.turtleNameText.visibility = View.VISIBLE
-        binding.turtleNameText.setTextColor(binding.gameView.paints[turtleColor]!!.color)
-        binding.wonText.visibility = View.VISIBLE
+        runOnUiThread {
+            binding.turtleNameText.text = name
+            binding.turtleNameText.visibility = View.VISIBLE
+            binding.turtleNameText.setTextColor(binding.gameView.paints[turtleColor]!!.color)
+            binding.wonText.visibility = View.VISIBLE
+        }
     }
 
     override fun startGame() {
-        binding.startGameButton.visibility = View.INVISIBLE
-        binding.waitingText.visibility = View.INVISIBLE
-        binding.readyText.visibility = View.INVISIBLE
+        runOnUiThread {
+            binding.startGameButton.visibility = View.INVISIBLE
+            binding.waitingText.visibility = View.INVISIBLE
+            binding.readyText.visibility = View.INVISIBLE
+        }
     }
 }

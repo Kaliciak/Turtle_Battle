@@ -9,5 +9,6 @@ class TurtleData(val x: Float,
                  val forceY: Float,
                  val vX: Float,
                  val vY: Float,
-                 val color: TurtleColor
+                 val color: TurtleColor,
+                 val alive: Boolean
 )

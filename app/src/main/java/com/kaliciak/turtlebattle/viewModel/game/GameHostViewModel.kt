@@ -60,7 +60,7 @@ class GameHostViewModel(private val activity: FragmentActivity,
         handler.postDelayed(tickClock, ((1000)/fps).toLong())
     }
 
-    fun stopGame() {
+    private fun stopGame() {
         handler.removeCallbacksAndMessages(null)
         stopped = true
         player.stop()
@@ -75,14 +75,18 @@ class GameHostViewModel(private val activity: FragmentActivity,
         return player.turtle
     }
 
-    override fun gameOver(turtle: Turtle?) {
-        if(turtle == null) {
+    override fun gameOver() {
+        val aliveTurtles = board.getAliveTurtles()
+        if(aliveTurtles.isEmpty()) {
             delegate.gameOver("NONE", TurtleColor.WHITE)
         }
         else {
+            val turtle = aliveTurtles.first()
             val color = turtle.color
             delegate.gameOver(color.name, color)
         }
+
+        sendBoardData()
         stopGame()
     }
 

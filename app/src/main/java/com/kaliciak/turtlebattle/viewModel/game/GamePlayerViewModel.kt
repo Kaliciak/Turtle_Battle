@@ -30,7 +30,7 @@ class GamePlayerViewModel(private val activity: FragmentActivity,
     override val boardHeight = activity.resources.getInteger(R.integer.gameHeight)
     private val fps = 30
     // messages per second
-    private val mps = 10
+    private val mps = 5
     private val board: Board
     private var handler = Handler(Looper.getMainLooper())
     private val tickClock = TickClock()
@@ -66,7 +66,7 @@ class GamePlayerViewModel(private val activity: FragmentActivity,
         }
     }
 
-    fun stopGame() {
+    private fun stopGame() {
         handler.removeCallbacksAndMessages(null)
         stopped = true
         player.stop()
@@ -81,14 +81,21 @@ class GamePlayerViewModel(private val activity: FragmentActivity,
         return player.turtle
     }
 
-    override fun gameOver(turtle: Turtle?) {
-        if(turtle == null) {
+    override fun gameOver() {
+        // wait for server to confirm game over
+    }
+
+    private fun trueGameOver() {
+        val aliveTurtles = board.getAliveTurtles()
+        if(aliveTurtles.isEmpty()) {
             delegate.gameOver("NONE", TurtleColor.WHITE)
         }
         else {
+            val turtle = aliveTurtles.first()
             val color = turtle.color
             delegate.gameOver(color.name, color)
         }
+
         stopGame()
     }
 
@@ -101,6 +108,9 @@ class GamePlayerViewModel(private val activity: FragmentActivity,
         try {
             val boardData = Json.decodeFromString<BoardData>(message)
             board.applyBoardData(boardData)
+            if(boardData.gameOver) {
+                trueGameOver()
+            }
         } catch (e: Exception) {
             Log.d("EXCEPTION", "$e")
         }

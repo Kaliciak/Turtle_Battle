@@ -25,6 +25,9 @@ class Turtle(x: Float,
     var vY = 0f
         @Synchronized set
         @Synchronized get
+    var alive = true
+        @Synchronized set
+        @Synchronized get
 
     fun getState(): TurtleState {
         return TurtleState(x, y, r, color)
@@ -55,7 +58,7 @@ class Turtle(x: Float,
 
     @Synchronized
     fun getTurtleData(): TurtleData {
-        return TurtleData(x, y, forceX, forceY, vX, vY, color)
+        return TurtleData(x, y, forceX, forceY, vX, vY, color, alive)
     }
 
     @Synchronized
@@ -66,5 +69,6 @@ class Turtle(x: Float,
         forceY = turtleData.forceY
         vX = turtleData.vX
         vY = turtleData.vY
+        alive = turtleData.alive
     }
 }

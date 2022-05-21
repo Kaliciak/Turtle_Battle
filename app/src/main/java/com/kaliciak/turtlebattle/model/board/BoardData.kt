@@ -7,4 +7,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 class BoardData(val turtles: List<TurtleData>,
                 val coastline: Coastline,
-                val speed: Float)
+                val speed: Float,
+                val gameOver: Boolean)

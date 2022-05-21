@@ -61,7 +61,7 @@ class BluetoothGamePlayerService(private val delegate: GamePlayerViewModelDelega
                     }
                     else {
                         val str = String(received.copyOfRange(0, bytes), charset)
-                        Log.d("received", str)
+//                        Log.d("received", str)
                         delegate.gotMessage(str)
                     }
                 }
