@@ -60,10 +60,15 @@ class GameHostViewModel(private val activity: FragmentActivity,
         handler.postDelayed(tickClock, ((1000)/fps).toLong())
     }
 
-    override fun stop() {
+    fun stopGame() {
         handler.removeCallbacksAndMessages(null)
         stopped = true
         player.stop()
+    }
+
+    override fun stop() {
+        stopGame()
+        hostService.stop()
     }
 
     fun getPlayerTurtle(): Turtle {
@@ -78,7 +83,7 @@ class GameHostViewModel(private val activity: FragmentActivity,
             val color = turtle.color
             delegate.gameOver(color.name, color)
         }
-        stop()
+        stopGame()
     }
 
     override fun playerConnected() {

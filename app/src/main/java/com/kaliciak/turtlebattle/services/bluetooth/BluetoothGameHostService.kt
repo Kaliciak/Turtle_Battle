@@ -55,16 +55,18 @@ class BluetoothGameHostService(
     }
 
     fun sendStartMessage() {
-        try {
-            outputStream?.write(89)
-        } catch (e: Exception) {
-            Log.d("EXCEPTION", "$e")
-        }
+        outputStream?.write(89)
     }
 
     fun sendBoardData(message: String) {
         sendThread = SendThread(message)
         sendThread?.start()
+    }
+
+    fun stop() {
+        serverSocket?.close()
+        socket?.close()
+        listenThread?.stopThread()
     }
 
     private fun startServer() {
@@ -156,38 +158,52 @@ class BluetoothGameHostService(
                     ) != PackageManager.PERMISSION_GRANTED
                 ))) {
                     serverSocket = bluetoothAdapter?.listenUsingRfcommWithServiceRecord("TURTLE BATTLE", uuid)
-
             }
         }
 
         override fun run() {
             super.run()
-            socket = serverSocket?.accept()
-            inputStream = socket?.inputStream
-            outputStream = socket?.outputStream
-            delegate.playerConnected()
-            Log.d("socket", "acc $serverSocket")
-            listenThread = ListenThread()
-            listenThread?.start()
+            try {
+                socket = serverSocket?.accept()
+                inputStream = socket?.inputStream
+                outputStream = socket?.outputStream
+                delegate.playerConnected()
+                Log.d("socket", "acc $serverSocket")
+                listenThread = ListenThread()
+                listenThread?.start()
+            } catch(e: Exception) {
+                Log.d("EXCEPTION", "$e")
+            }
         }
     }
 
     inner class ListenThread: Thread() {
+        private var stopped = false
+            @Synchronized set
+            @Synchronized get
+
         override fun run() {
             super.run()
-            while(true) {
-                val received = ByteArray(1024)
-                val bytes = inputStream?.read(received)
-                if (bytes == null || bytes <= 0) {
-                    Log.d("received", "$bytes")
-                    Log.d("inpstr", "$inputStream")
+            try {
+                while (!stopped) {
+                    val received = ByteArray(1024)
+                    val bytes = inputStream?.read(received)
+                    if (bytes == null || bytes <= 0) {
+                        Log.d("received", "$bytes")
+                        Log.d("inpstr", "$inputStream")
+                    } else {
+                        val str = String(received.copyOfRange(0, bytes), charset)
+                        Log.d("received", str)
+                        delegate.gotMessage(str)
+                    }
                 }
-                else {
-                    val str = String(received.copyOfRange(0, bytes), charset)
-                    Log.d("received", str)
-                    delegate.gotMessage(str)
-                }
+            } catch (e: Exception) {
+                Log.d("EXCEPTION", "$e")
             }
+        }
+
+        fun stopThread() {
+            stopped = true
         }
     }
 
@@ -195,7 +211,11 @@ class BluetoothGameHostService(
         override fun run() {
             super.run()
             val bytes = message.toByteArray(charset)
-            outputStream?.write(bytes)
+            try {
+                outputStream?.write(bytes)
+            } catch (e: Exception) {
+                Log.d("EXCEPTION", "$e")
+            }
 //            Log.d("written", message)
         }
     }

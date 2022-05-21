@@ -30,7 +30,7 @@ class GamePlayerViewModel(private val activity: FragmentActivity,
     override val boardHeight = activity.resources.getInteger(R.integer.gameHeight)
     private val fps = 30
     // messages per second
-    private val mps = 5
+    private val mps = 10
     private val board: Board
     private var handler = Handler(Looper.getMainLooper())
     private val tickClock = TickClock()
@@ -66,10 +66,15 @@ class GamePlayerViewModel(private val activity: FragmentActivity,
         }
     }
 
-    override fun stop() {
+    fun stopGame() {
         handler.removeCallbacksAndMessages(null)
         stopped = true
         player.stop()
+    }
+
+    override fun stop() {
+        stopGame()
+        bluetoothService.stop()
     }
 
     fun getPlayerTurtle(): Turtle {
@@ -84,7 +89,7 @@ class GamePlayerViewModel(private val activity: FragmentActivity,
             val color = turtle.color
             delegate.gameOver(color.name, color)
         }
-        stop()
+        stopGame()
     }
 
 

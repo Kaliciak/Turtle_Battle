@@ -8,7 +8,7 @@ import com.kaliciak.turtlebattle.model.turtle.Turtle
 import com.kaliciak.turtlebattle.model.turtle.TurtleData
 import com.kaliciak.turtlebattle.model.turtle.TurtleForcesData
 import com.kaliciak.turtlebattle.viewModel.game.GameViewModelDelegate
-import java.lang.Exception
+import kotlin.Exception
 
 class Board(val width: Int,
             val height: Int,
@@ -74,7 +74,11 @@ class Board(val width: Int,
         checkCoastline()
 
         if(turtles.size <= 1) {
-            delegate.gameOver(turtles.first())
+            try {
+                delegate.gameOver(turtles.first())
+            } catch (e: Exception) {
+                delegate.gameOver(null)
+            }
         }
     }
 

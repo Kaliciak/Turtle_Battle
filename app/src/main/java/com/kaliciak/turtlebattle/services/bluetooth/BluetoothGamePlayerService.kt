@@ -23,34 +23,55 @@ class BluetoothGamePlayerService(private val delegate: GamePlayerViewModelDelega
         sendThread?.start()
     }
 
+    fun stop() {
+        socket?.close()
+        listenThread.stopThread()
+    }
+
     inner class StartListenThread: Thread() {
         override fun run() {
             super.run()
-            val x = inputStream?.read()
-            Log.d("received", "$x")
-            if(x == 89) {
-                delegate.gameStarted()
-                listenThread.start()
+            try {
+                val x = inputStream?.read()
+                Log.d("received", "$x")
+                if (x == 89) {
+                    delegate.gameStarted()
+                    listenThread.start()
+                }
+            } catch (e: Exception) {
+                Log.d("EXCEPTION", "$e")
             }
         }
     }
 
     inner class ListenThread: Thread() {
+        private var stopped = false
+            @Synchronized set
+            @Synchronized get
+
         override fun run() {
             super.run()
-            while(true) {
-                val received = ByteArray(2048)
-                val bytes = inputStream?.read(received)
-                if (bytes == null || bytes <= 0) {
-                    Log.d("received", "$bytes")
-                    Log.d("inpstr", "$inputStream")
+            try {
+                while(!stopped) {
+                    val received = ByteArray(2048)
+                    val bytes = inputStream?.read(received)
+                    if (bytes == null || bytes <= 0) {
+                        Log.d("received", "$bytes")
+                        Log.d("inpstr", "$inputStream")
+                    }
+                    else {
+                        val str = String(received.copyOfRange(0, bytes), charset)
+                        Log.d("received", str)
+                        delegate.gotMessage(str)
+                    }
                 }
-                else {
-                    val str = String(received.copyOfRange(0, bytes), charset)
-                    Log.d("received", str)
-                    delegate.gotMessage(str)
-                }
+            } catch (e: Exception) {
+                Log.d("EXCEPTION", "$e")
             }
+        }
+
+        fun stopThread() {
+            stopped = true
         }
     }
 
@@ -58,7 +79,11 @@ class BluetoothGamePlayerService(private val delegate: GamePlayerViewModelDelega
         override fun run() {
             super.run()
             val bytes = message.toByteArray(charset)
-            outputStream?.write(bytes)
+            try {
+                outputStream?.write(bytes)
+            } catch (e: Exception) {
+                Log.d("EXCEPTION", "$e")
+            }
 //            Log.d("written", message)
         }
     }
