@@ -193,7 +193,6 @@ class BluetoothGameHostService(
                         Log.d("inpstr", "$inputStream")
                     } else {
                         val str = String(received.copyOfRange(0, bytes), charset)
-                        Log.d("received", str)
                         delegate.gotMessage(str)
                     }
                 }
@@ -216,7 +215,6 @@ class BluetoothGameHostService(
             } catch (e: Exception) {
                 Log.d("EXCEPTION", "$e")
             }
-//            Log.d("written", message)
         }
     }
 }

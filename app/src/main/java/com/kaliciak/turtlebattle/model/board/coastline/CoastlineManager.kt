@@ -102,8 +102,6 @@ class CoastlineManager(private val width: Int, private val height: Int, private 
         speed = min(maxSpeed, speed + acceleration/fps)
         minLandWidth = max(limLandWidth, minLandWidth - landWidthAcc/fps)
         maxDerivation = min(limDerivation, maxDerivation + derivationAcc/fps)
-//        Log.d(null, "$speed, $minLandWidth, $maxDerivation")
-//        Log.d(null, "$coastline")
     }
 
     private fun getCoastX(lowerPoint: Point, upperPoint: Point, y: Float): Float {

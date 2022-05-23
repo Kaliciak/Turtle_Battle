@@ -11,6 +11,8 @@ class RotationVectorListener(private val delegate: RotationVectorListenerDelegat
     : SensorEventListener {
 
     private val gravityReadings = FloatArray(3)
+        @Synchronized get
+
 
     fun start() {
         sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY)?.also { gravity ->
@@ -27,20 +29,11 @@ class RotationVectorListener(private val delegate: RotationVectorListenerDelegat
         gravityReadings[0] = event.values[0]
         gravityReadings[1] = event.values[1]
         gravityReadings[2] = event.values[2]
-        notifyDelegate()
     }
 
-    private fun notifyDelegate() {
-        delegate.didChange(
-            gravityReadings[0],
-            gravityReadings[1],
-            gravityReadings[2]
-        )
-    }
+    fun getReadings(): FloatArray = gravityReadings
 
-    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-//        Log.d("listener", "onAccuracyChanged")
-    }
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
 
     fun stop() {
         sensorManager.unregisterListener(this)

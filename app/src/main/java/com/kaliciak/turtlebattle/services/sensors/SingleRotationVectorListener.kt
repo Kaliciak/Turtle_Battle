@@ -38,7 +38,5 @@ class SingleRotationVectorListener(private val delegate: RotationVectorListenerD
         )
     }
 
-    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-//        Log.d("listener", "onAccuracyChanged")
-    }
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
 }

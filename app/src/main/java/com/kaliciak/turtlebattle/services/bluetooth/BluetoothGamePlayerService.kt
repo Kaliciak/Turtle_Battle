@@ -61,7 +61,6 @@ class BluetoothGamePlayerService(private val delegate: GamePlayerViewModelDelega
                     }
                     else {
                         val str = String(received.copyOfRange(0, bytes), charset)
-//                        Log.d("received", str)
                         delegate.gotMessage(str)
                     }
                 }
@@ -84,7 +83,6 @@ class BluetoothGamePlayerService(private val delegate: GamePlayerViewModelDelega
             } catch (e: Exception) {
                 Log.d("EXCEPTION", "$e")
             }
-//            Log.d("written", message)
         }
     }
 }

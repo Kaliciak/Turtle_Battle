@@ -7,7 +7,8 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import com.kaliciak.turtlebattle.R
-import com.kaliciak.turtlebattle.model.*
+import com.kaliciak.turtlebattle.model.CalibrationData
+import com.kaliciak.turtlebattle.model.Player
 import com.kaliciak.turtlebattle.model.board.Board
 import com.kaliciak.turtlebattle.model.board.BoardState
 import com.kaliciak.turtlebattle.model.turtle.Turtle
@@ -71,10 +72,6 @@ class GameHostViewModel(private val activity: FragmentActivity,
         hostService.stop()
     }
 
-    fun getPlayerTurtle(): Turtle {
-        return player.turtle
-    }
-
     override fun gameOver() {
         val aliveTurtles = board.getAliveTurtles()
         if(aliveTurtles.isEmpty()) {
@@ -98,7 +95,7 @@ class GameHostViewModel(private val activity: FragmentActivity,
         delegate.playerConnected()
     }
 
-    fun sendBoardData() {
+    private fun sendBoardData() {
         val boardData = board.getBoardData()
         val message = Json.encodeToString(boardData)
         hostService.sendBoardData(message)

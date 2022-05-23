@@ -3,12 +3,10 @@ package com.kaliciak.turtlebattle.model.board
 import android.util.Log
 import com.kaliciak.turtlebattle.model.board.coastline.Coastline
 import com.kaliciak.turtlebattle.model.board.coastline.CoastlineManager
-import com.kaliciak.turtlebattle.model.board.coastline.Point
 import com.kaliciak.turtlebattle.model.turtle.Turtle
 import com.kaliciak.turtlebattle.model.turtle.TurtleData
 import com.kaliciak.turtlebattle.model.turtle.TurtleForcesData
 import com.kaliciak.turtlebattle.viewModel.game.GameViewModelDelegate
-import kotlin.Exception
 
 class Board(val width: Int,
             val height: Int,

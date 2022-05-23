@@ -1,9 +1,9 @@
 package com.kaliciak.turtlebattle.view
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import com.kaliciak.turtlebattle.databinding.ActivityMainBinding
 import com.kaliciak.turtlebattle.model.CalibrationData
 import com.kaliciak.turtlebattle.view.foundGames.FoundGamesActivity

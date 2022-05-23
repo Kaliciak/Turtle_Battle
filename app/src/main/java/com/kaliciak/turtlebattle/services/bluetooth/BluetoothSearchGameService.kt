@@ -20,7 +20,6 @@ import androidx.fragment.app.FragmentActivity
 import com.kaliciak.turtlebattle.R
 import com.kaliciak.turtlebattle.model.bluetooth.Device
 import com.kaliciak.turtlebattle.viewModel.foundGames.FoundGamesViewModelDelegate
-import java.lang.Exception
 import java.util.*
 
 class BluetoothSearchGameService(
@@ -32,8 +31,6 @@ class BluetoothSearchGameService(
     private val uuid = UUID.fromString(activity.resources.getString(R.string.game_service_uuid))
 
     // Intent request codes
-    private val REQUEST_CONNECT_DEVICE_SECURE = 1
-    private val REQUEST_CONNECT_DEVICE_INSECURE = 2
     private val REQUEST_ENABLE_BT = 3
 
     private var conThr: ConnectThread? = null

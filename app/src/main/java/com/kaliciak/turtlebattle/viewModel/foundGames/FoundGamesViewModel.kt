@@ -39,7 +39,6 @@ class FoundGamesViewModel(
         calibrationData.x = valX
         calibrationData.y = valY
         calibrationData.z = valZ
-//        Log.d("calibrate", "${calibrationData.x}, ${calibrationData.y}, ${calibrationData.z}")
     }
 
     fun scan() {

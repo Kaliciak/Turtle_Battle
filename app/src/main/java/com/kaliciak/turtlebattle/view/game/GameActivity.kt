@@ -36,7 +36,6 @@ class GameActivity: AppCompatActivity(), GameActivityDelegate {
             }
 
             startGame()
-//            viewModel?.startGame()
         }
 
         binding.startGameButton.setOnClickListener {

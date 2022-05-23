@@ -7,7 +7,8 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import com.kaliciak.turtlebattle.R
-import com.kaliciak.turtlebattle.model.*
+import com.kaliciak.turtlebattle.model.CalibrationData
+import com.kaliciak.turtlebattle.model.Player
 import com.kaliciak.turtlebattle.model.board.Board
 import com.kaliciak.turtlebattle.model.board.BoardData
 import com.kaliciak.turtlebattle.model.board.BoardState
@@ -29,7 +30,7 @@ class GamePlayerViewModel(private val activity: FragmentActivity,
     override val boardHeight = activity.resources.getInteger(R.integer.gameHeight)
     private val fps = 30
     // messages per second
-    private val mps = 10
+    private val mps = 30
     private val board: Board
     private var handler = Handler(Looper.getMainLooper())
     private val tickClock = TickClock()
@@ -74,10 +75,6 @@ class GamePlayerViewModel(private val activity: FragmentActivity,
     override fun stop() {
         stopGame()
         bluetoothService.stop()
-    }
-
-    fun getPlayerTurtle(): Turtle {
-        return player.turtle
     }
 
     override fun gameOver() {

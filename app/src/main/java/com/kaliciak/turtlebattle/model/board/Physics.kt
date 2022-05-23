@@ -18,7 +18,6 @@ class Physics {
             applyFriction(turtle, board)
             applyForces(turtle, board.fps)
             while (!hasValidPosition(turtle, board)) {
-//                Log.d("process", "$turtle")
                 bounceOffBorders(turtle, board)
                 board.turtles.forEach { turtle2 ->
                     if(turtle != turtle2) {
@@ -69,19 +68,9 @@ class Physics {
         private fun outOfBorders(turtle: Turtle, board: Board): Boolean {
             return turtle.y - turtle.r < 0 ||
                     turtle.y + turtle.r > board.height
-//                    turtle.x - turtle.r < 0 ||
-//                    turtle.x + turtle.r > board.width
         }
 
         private fun bounceOffBorders(turtle: Turtle, board: Board) {
-//            if(turtle.x - turtle.r < 0) {
-//                turtle.x += 2 * abs(turtle.r - turtle.x)
-//                turtle.vX = -turtle.vX * 0.5f
-//            }
-//            if(turtle.x + turtle.r > board.width) {
-//                turtle.x -= 2 * abs(-board.width + turtle.x + turtle.r)
-//                turtle.vX = -turtle.vX * 0.5f
-//            }
             if(turtle.y - turtle.r < 0) {
                 turtle.y += 2 * abs(turtle.r - turtle.y)
                 turtle.vY = -turtle.vY * 0.5f
